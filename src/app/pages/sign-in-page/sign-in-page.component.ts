@@ -1,8 +1,6 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  ViewChild,
-  signal,
 } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SharedModule } from 'src/app/shared/shared/shared.module';

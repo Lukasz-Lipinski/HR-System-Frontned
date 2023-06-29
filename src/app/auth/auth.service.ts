@@ -9,10 +9,17 @@ import {
   map,
   tap,
 } from 'rxjs';
+import { mockedAdminCredential } from '../mocks/mocks';
 
-export interface IBodyRequest {
+export interface IBodyRequestLogin {
   email: string;
   password: string;
+}
+
+export interface IBodyRequestRegister
+  extends IBodyRequestLogin {
+  name: string;
+  surname: string;
 }
 
 export interface AdminCredential {
@@ -33,13 +40,11 @@ export interface IBackendReponse {
   providedIn: 'root',
 })
 export class AuthService {
-  adminCredential: BehaviorSubject<AdminCredential> =
-    new BehaviorSubject<AdminCredential>({
-      email: '',
-      name: '',
-      surname: '',
-      token: '',
-    });
+  adminCredential: BehaviorSubject<
+    AdminCredential | undefined
+  > = new BehaviorSubject<
+    AdminCredential | undefined
+  >(undefined);
 
   constructor(
     private http: HttpClient,
@@ -47,7 +52,7 @@ export class AuthService {
   ) {}
 
   Login(
-    userCred: IBodyRequest
+    userCred: IBodyRequestLogin
   ): Observable<IBackendReponse> {
     return this.http
       .post<IBackendReponse>(
@@ -56,9 +61,23 @@ export class AuthService {
       )
       .pipe(
         tap((res) => {
-          if (res.data)
+          if (res.data) {
             this.adminCredential.next(res.data);
+            sessionStorage.setItem(
+              'token',
+              res.data.token
+            );
+          }
         })
       );
+  }
+
+  Register(
+    userCred: IBodyRequestRegister
+  ): Observable<IBackendReponse> {
+    return this.http.post<IBackendReponse>(
+      `${this.environment}/Admin/register`,
+      userCred
+    );
   }
 }

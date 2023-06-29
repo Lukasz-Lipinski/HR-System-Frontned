@@ -13,9 +13,23 @@ body {
 .container {
   display: flex;
   justify-content: center;
+
+  @media only screen and (width < 400px) {
+    * {
+      gap: 12px;
+      width: 100%;
+    }
+  }
 }
 
 .form-shape {
   display: flex;
   flex-direction: column;
+  min-width: 400px;
+
+  @media only screen and (width < 400px) {
+    button {
+      min-height: 80px;
+    }
+  }
 }

@@ -11,9 +11,10 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { Router } from '@angular/router';
 import {
   AuthService,
-  IBodyRequest,
+  IBodyRequestLogin,
 } from 'src/app/auth/auth.service';
 
 export interface ISigninForm {
@@ -37,9 +38,12 @@ export interface ISigninFormControl {
 export class SigninFormComponent {
   @Output() errorEmitter =
     new EventEmitter<string>();
-  private isLoading = signal<boolean>(false);
+  private loadingState = signal<boolean>(false);
   get getLoadingState() {
-    return this.isLoading();
+    return this.loadingState();
+  }
+  set setLoadingState(state: boolean) {
+    this.loadingState.set(state);
   }
   private signinForm!: FormGroup<ISigninForm>;
   get GetSigninForm() {
@@ -67,7 +71,10 @@ export class SigninFormComponent {
     return this.signinForm.invalid;
   }
 
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.signinForm = new FormGroup({
@@ -125,20 +132,25 @@ export class SigninFormComponent {
     if (this.GetSigninForm.valid) {
       const { email, password } =
         this.signinForm.controls;
-      const bodyRequest: IBodyRequest = {
+      const bodyRequest: IBodyRequestLogin = {
         email: email.value,
         password: password.value,
       };
-      this.isLoading.set(true);
+      this.loadingState.set(true);
       this.authService
         .Login(bodyRequest)
         .subscribe({
           next: () => {
-            this.isLoading.set(false);
+            this.loadingState.set(false);
+            this.router.navigate(['dashboard']);
           },
           error: (err: HttpErrorResponse) => {
-            this.isLoading.set(false);
-            this.errorEmitter.emit(err.error);
+            this.loadingState.set(false);
+            typeof err.error === 'string'
+              ? this.errorEmitter.emit(err.error)
+              : this.errorEmitter.emit(
+                  'Invalid connection. Please try again later'
+                );
           },
         });
     }
