@@ -1,0 +1,6 @@
+<div *ngIf="!isSpinner; else Spinner">
+  <router-outlet></router-outlet>
+</div>
+<ng-template #Spinner>
+  <app-loader></app-loader>
+</ng-template>

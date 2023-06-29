@@ -1,0 +1,32 @@
+<form
+  [formGroup]="GetSigninForm"
+  (ngSubmit)="onSubmit()"
+  class="form-shape"
+>
+  <mat-form-field
+    *ngFor="let control of GetSigninFormControls"
+  >
+    <mat-label>{{ control.label }}</mat-label>
+    <input
+      matInput
+      [type]="control.type"
+      [formControlName]="control.name"
+      [placeholder]="control.placeholder"
+    />
+    <mat-error>{{
+      getInputError(control.name)
+    }}</mat-error>
+  </mat-form-field>
+  <button
+    *ngIf="!getLoadingState; else Spinner"
+    mat-raised-button
+    color="primary"
+    [disabled]="IsFormInvalid"
+  >
+    Login
+  </button>
+</form>
+
+<ng-template #Spinner>
+  <mat-spinner color="accent"></mat-spinner>
+</ng-template>
