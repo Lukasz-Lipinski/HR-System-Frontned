@@ -1,9 +1,8 @@
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   Input,
-  Signal,
-  signal,
 } from '@angular/core';
 
 @Component({
@@ -13,6 +12,9 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoaderComponent {
-  @Input() isSpinner: Signal<boolean> =
-    signal(false);
+  @Input({ required: true }) isSpinner: boolean =
+    false;
+
+  constructor() {}
+  ngOnInit() {}
 }

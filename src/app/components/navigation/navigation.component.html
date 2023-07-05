@@ -1,0 +1,26 @@
+<mat-sidenav-container
+  style="z-index: 1000"
+  hasBackdrop="true"
+>
+  <mat-sidenav
+    #drawer
+    class="drawer-background"
+    mode="over"
+  >
+    test
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <div class="grid">
+      <div
+        class="field"
+        (mouseenter)="drawer.toggle()"
+      >
+        field
+      </div>
+      <div>
+        <ng-content></ng-content>
+        other content
+      </div>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

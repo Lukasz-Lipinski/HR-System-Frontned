@@ -1,0 +1,11 @@
+.field {
+  height: 100%;
+  min-width: 50px;
+  max-width: 200px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  grid-template-rows: repeat(1, auto);
+}

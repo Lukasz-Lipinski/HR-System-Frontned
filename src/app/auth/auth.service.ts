@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import {
   Inject,
   Injectable,
+  OnInit,
 } from '@angular/core';
 import {
   BehaviorSubject,
@@ -39,7 +40,7 @@ export interface IBackendReponse {
 @Injectable({
   providedIn: 'root',
 })
-export class AuthService {
+export class AuthService implements OnInit {
   adminCredential: BehaviorSubject<
     AdminCredential | undefined
   > = new BehaviorSubject<
@@ -50,6 +51,11 @@ export class AuthService {
     private http: HttpClient,
     @Inject('LocalEnv') private environment: any
   ) {}
+
+  ngOnInit(): void {
+    this.GetAdminCredential();
+    console.log(this.adminCredential.getValue());
+  }
 
   Login(
     userCred: IBodyRequestLogin
@@ -80,4 +86,29 @@ export class AuthService {
       userCred
     );
   }
+
+  private GetAdminCredential() {
+    const adminToken =
+      sessionStorage.getItem('token');
+    const adminCred =
+      this.adminCredential.getValue();
+    if (adminToken && !adminCred) {
+      this.http
+        .get<IBackendReponse>(
+          `${this.environment}/Admin`,
+          {
+            headers: {
+              Authorization: `${adminToken}`,
+            },
+          }
+        )
+        .subscribe({
+          next: (res) => {
+            this.adminCredential.next(res.data);
+          },
+        });
+    }
+  }
+
+  Logout() {}
 }

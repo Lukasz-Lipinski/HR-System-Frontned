@@ -15,7 +15,6 @@ import {
   mockedBodyRequestLogin,
   mockedEnvironment,
 } from '../mocks/mocks';
-import { tap } from 'rxjs';
 
 describe('Testing AuthService', () => {
   let service: AuthService;

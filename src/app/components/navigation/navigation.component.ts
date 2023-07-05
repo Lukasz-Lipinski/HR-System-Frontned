@@ -1,5 +1,8 @@
-import { ChangeDetectionStrategy } from '@angular/core';
-import { Component, Input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  signal,
+} from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-navigation',

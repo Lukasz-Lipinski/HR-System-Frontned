@@ -12,6 +12,7 @@ import {
   NavigationStart,
   Router,
 } from '@angular/router';
+import { ColorType } from './components/loader-progress/loader-progress.component';
 
 @Component({
   selector: 'app-root',
@@ -20,11 +21,15 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent implements OnInit {
-  title = 'hr-system-frontend';
   private spinner = signal<boolean>(true);
   get isSpinner() {
     return this.spinner();
   }
+  private color = signal<ColorType>('accent');
+  get getColor() {
+    return this.color();
+  }
+  timer: any;
 
   constructor(private router: Router) {
     this.router.events.subscribe({
@@ -36,11 +41,21 @@ export class AppComponent implements OnInit {
           event instanceof NavigationEnd ||
           event instanceof NavigationError
         ) {
-          this.spinner.set(false);
+          this.color.set('primary');
+          this.timer = this.startTimer(2000);
         }
       },
     });
   }
 
   ngOnInit(): void {}
+
+  startTimer = (time: number) =>
+    setTimeout(() => {
+      this.spinner.set(false);
+    }, time);
+
+  ngOnDestroy() {
+    clearTimeout(this.timer);
+  }
 }
