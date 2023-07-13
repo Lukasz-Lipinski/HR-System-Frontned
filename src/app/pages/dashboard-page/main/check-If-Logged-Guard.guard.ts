@@ -11,12 +11,11 @@ export const checkIfLoggedGuard: CanActivateFn = (
 ) => {
   const authService = inject(AuthService);
   const router = inject(Router);
-  const adminToken =
-    authService.adminCredential.getValue()?.token;
   const localToken =
     sessionStorage.getItem('token');
 
-  if (adminToken || localToken) {
+  if (localToken) {
+    authService.SetAdminCred();
     return router.navigate(['dashboard']);
   }
 

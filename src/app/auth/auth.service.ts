@@ -10,7 +10,6 @@ import {
   map,
   tap,
 } from 'rxjs';
-import { mockedAdminCredential } from '../mocks/mocks';
 
 export interface IBodyRequestLogin {
   email: string;
@@ -30,9 +29,9 @@ export interface AdminCredential {
   token: string;
 }
 
-export interface IBackendReponse {
+export interface IBackendReponse<T> {
   code: number;
-  data: AdminCredential;
+  data: T;
   error: boolean;
   message: string;
 }
@@ -52,16 +51,15 @@ export class AuthService implements OnInit {
     @Inject('LocalEnv') private environment: any
   ) {}
 
-  ngOnInit(): void {
-    this.GetAdminCredential();
-    console.log(this.adminCredential.getValue());
-  }
+  ngOnInit(): void {}
 
   Login(
     userCred: IBodyRequestLogin
-  ): Observable<IBackendReponse> {
+  ): Observable<
+    IBackendReponse<AdminCredential>
+  > {
     return this.http
-      .post<IBackendReponse>(
+      .post<IBackendReponse<AdminCredential>>(
         `${this.environment.apiUrl}/api/Admin/login`,
         userCred
       )
@@ -80,21 +78,24 @@ export class AuthService implements OnInit {
 
   Register(
     userCred: IBodyRequestRegister
-  ): Observable<IBackendReponse> {
-    return this.http.post<IBackendReponse>(
+  ): Observable<
+    IBackendReponse<AdminCredential>
+  > {
+    return this.http.post<
+      IBackendReponse<AdminCredential>
+    >(
       `${this.environment}/Admin/register`,
       userCred
     );
   }
 
-  private GetAdminCredential() {
+  SetAdminCred() {
     const adminToken =
       sessionStorage.getItem('token');
-    const adminCred =
-      this.adminCredential.getValue();
-    if (adminToken && !adminCred) {
+
+    if (adminToken) {
       this.http
-        .get<IBackendReponse>(
+        .get<IBackendReponse<AdminCredential>>(
           `${this.environment}/Admin`,
           {
             headers: {

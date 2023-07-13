@@ -4,6 +4,7 @@ import {
   IBodyRequestLogin,
   IBodyRequestRegister,
 } from '../auth/auth.service';
+import { ILink } from '../components/navigation/navigation.component';
 
 export const mockedEmail = 'test@example.com';
 export const mockedPassword = 'testpassword';
@@ -46,3 +47,25 @@ export const mockedEnvironment = {
   production: false,
   apiUrl: 'test-host-api',
 };
+export const mockedLinks: ILink[] = [
+  {
+    href: '/',
+    label: 'Home',
+    icon: 'home',
+  },
+  {
+    href: '/create-user',
+    label: 'Add User',
+    icon: 'add',
+  },
+  {
+    href: '/update-user-credential',
+    label: 'Modify User Credential',
+    icon: 'edit',
+  },
+  {
+    href: '/account',
+    label: 'Account',
+    icon: 'person',
+  },
+];

@@ -2,7 +2,6 @@ import {
   ChangeDetectionStrategy,
   Component,
   OnInit,
-  Signal,
   signal,
 } from '@angular/core';
 import {

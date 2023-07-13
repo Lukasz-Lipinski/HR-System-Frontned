@@ -12,7 +12,9 @@ body {
 
 .container {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
+  padding: 1rem;
 
   @media only screen and (width < 400px) {
     * {

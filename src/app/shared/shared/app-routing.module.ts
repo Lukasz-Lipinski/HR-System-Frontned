@@ -1,13 +1,11 @@
-import { NgModule, inject } from '@angular/core';
+import { NgModule } from '@angular/core';
 import {
-  CanActivateFn,
-  Router,
   RouterModule,
   Routes,
 } from '@angular/router';
 import { AppComponent } from 'src/app/app.component';
-import { AuthService } from 'src/app/auth/auth.service';
-import { checkIfLoggedGuard } from 'src/app/pages/main-page/check-If-Logged-Guard.guard';
+import { checkIfLoggedGuard } from 'src/app/pages/dashboard-page/main/check-If-Logged-Guard.guard';
+import { dashboardMainPageResolver } from 'src/app/pages/dashboard-page/main/dashboard-main-page.resolver';
 import { signInPageGuard } from 'src/app/pages/sign-in-page/sign-in-page.guard';
 
 const routes: Routes = [
@@ -37,6 +35,30 @@ const routes: Routes = [
       import(
         '../../pages/dashboard-page/dashboard-page.component'
       ).then((m) => m.DashboardPageComponent),
+    // canMatch: [checkIfLoggedGuard],
+    children: [
+      {
+        path: '',
+        loadComponent: () =>
+          import(
+            '../../pages/dashboard-page/main/main.component'
+          ).then((m) => m.MainComponent),
+        resolve: {
+          employees: dashboardMainPageResolver,
+        },
+      },
+      {
+        path: 'account',
+        loadComponent: () =>
+          import(
+            '../../pages/account-page/account-page.component'
+          ).then((m) => m.AccountPageComponent),
+      },
+      {
+        path: '**',
+        redirectTo: 'dashboard',
+      },
+    ],
   },
 ];
 

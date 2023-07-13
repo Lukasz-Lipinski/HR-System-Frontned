@@ -1,11 +1,22 @@
 .field {
+  position: absolute;
+  background-color: transparent;
+  z-index: 2;
+  top: 0;
+  left: 0;
   height: 100%;
-  min-width: 50px;
-  max-width: 200px;
+  width: 20px;
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(2, auto);
-  grid-template-rows: repeat(1, auto);
+.drawer {
+  height: 100dvh;
+
+  &-menu {
+    padding: 2rem 1rem;
+
+    a {
+      display: flex;
+      align-items: center;
+    }
+  }
 }

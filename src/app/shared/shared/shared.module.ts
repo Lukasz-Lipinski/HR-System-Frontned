@@ -12,21 +12,31 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { MatIconModule } from '@angular/material/icon';
+import {
+  MatTable,
+  MatTableModule,
+} from '@angular/material/table';
 
 import { NavigationComponent } from 'src/app/components/navigation/navigation.component';
 import { LoaderComponent } from 'src/app/components/loader/loader.component';
 import { SigninFormComponent } from 'src/app/components/signin-form/signin-form.component';
 import { LoaderProgressComponent } from 'src/app/components/loader-progress/loader-progress.component';
+import { EmployeesListComponent } from 'src/app/components/employees-list/employees-list.component';
+import { SearchComponent } from 'src/app/components/search/search.component';
 
 const components: any[] = [
   NavigationComponent,
   LoaderComponent,
   SigninFormComponent,
   LoaderProgressComponent,
+  EmployeesListComponent,
+  SearchComponent,
 ];
 
 const modules = [
   MatFormFieldModule,
+  MatIconModule,
   MatInputModule,
   ReactiveFormsModule,
   CommonModule,
@@ -37,6 +47,7 @@ const modules = [
   MatSnackBarModule,
   MatProgressBarModule,
   MatSidenavModule,
+  MatTableModule,
   MatGridListModule,
 ];
 

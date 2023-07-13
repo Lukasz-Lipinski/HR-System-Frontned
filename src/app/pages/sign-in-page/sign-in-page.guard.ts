@@ -15,7 +15,7 @@ export const signInPageGuard: CanActivateFn = (
     authService.adminCredential.getValue();
   const token = sessionStorage.getItem('token');
 
-  return adminCred || token
+  return adminCred && token
     ? router.navigate(['dashboard'])
     : true;
 };

@@ -1,26 +1,40 @@
 <mat-sidenav-container
   style="z-index: 1000"
   hasBackdrop="true"
+  class="drawer"
 >
   <mat-sidenav
     #drawer
-    class="drawer-background"
     mode="over"
+    class="drawer-menu"
   >
-    test
+    <a
+      *ngFor="let link of getLinks"
+      mat-button
+      [routerLink]="link.href"
+      [color]="setColor(link.label)"
+    >
+      {{ link.label }}
+      <mat-icon
+        [fontIcon]="link.icon"
+        [color]="setColor(link.label)"
+      ></mat-icon>
+    </a>
+    <a
+      mat-button
+      color="warn"
+    >
+      Logout
+      <mat-icon fontIcon="logout"></mat-icon>
+    </a>
   </mat-sidenav>
   <mat-sidenav-content>
-    <div class="grid">
-      <div
-        class="field"
-        (mouseenter)="drawer.toggle()"
-      >
-        field
-      </div>
-      <div>
-        <ng-content></ng-content>
-        other content
-      </div>
+    <div
+      class="field"
+      (mouseenter)="drawer.toggle()"
+    ></div>
+    <div class="container">
+      <ng-content></ng-content>
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>
