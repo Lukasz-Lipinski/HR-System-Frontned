@@ -11,8 +11,12 @@
     <a
       *ngFor="let link of getLinks"
       mat-button
-      [routerLink]="link.href"
       [color]="setColor(link.label)"
+      [routerLink]="link.href"
+      [routerLinkActive]="setActive(link.label)"
+      [routerLinkActiveOptions]="{
+        exact: true
+      }"
     >
       {{ link.label }}
       <mat-icon

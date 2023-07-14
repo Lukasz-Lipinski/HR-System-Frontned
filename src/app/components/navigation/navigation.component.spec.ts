@@ -42,7 +42,7 @@ describe('Testing NavigationComponent', () => {
     it('should return links to the navigation component', () => {
       const links = component.getLinks;
 
-      expect(links.length).toBe(4);
+      expect(links.length).toBe(3);
       for (let i = 0; i < links.length; i++) {
         expect(links[i].href).toBe(
           mockedLinks[i].href
@@ -71,12 +71,12 @@ describe('Testing NavigationComponent', () => {
     it('Should render the navigation component', () => {
       expect(component).toBeTruthy();
     });
-    it('Should rendered 5 links', () => {
+    it('Should rendered 4 links', () => {
       const links = fixture.debugElement.queryAll(
         By.css('a')
       );
 
-      expect(links.length).toBe(5);
+      expect(links.length).toBe(4);
       for (let i = 0; i < links.length - 1; i++) {
         i < links.length &&
           expect(

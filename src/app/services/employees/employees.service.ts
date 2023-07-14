@@ -13,6 +13,7 @@ import {
 import { IBackendReponse } from 'src/app/auth/auth.service';
 
 export interface IEmployee {
+  id: string;
   name: string;
   surname: string;
   email: string;
@@ -33,6 +34,7 @@ export interface ISuperior {
 
 const mockedEmployees: IEmployee[] = [
   {
+    id: 'alsgjogajoj',
     name: 'John',
     surname: 'Doe',
     email: 'johndoe@example.com',
@@ -84,5 +86,48 @@ export class EmployeesService {
           return res.data ? res.data : [];
         })
       );
+  }
+
+  getEmployeeById(
+    id: string
+  ): Observable<IEmployee | null> {
+    const url =
+      this.env.apiUrl + '/api/Employee/' + id;
+    return this.http
+      .get<IBackendReponse<IEmployee>>(url, {
+        headers: {
+          Authorization:
+            'Bearer' +
+            sessionStorage.getItem('token'),
+        },
+      })
+      .pipe(
+        catchError((err) => {
+          return of({
+            error: true,
+            code: 401,
+            message: 'Unauthorized',
+            data: null,
+          });
+        }),
+        map((res) => {
+          return res.data;
+        })
+      );
+  }
+  deleteEmployee(
+    id: string
+  ): Observable<IBackendReponse<string>> {
+    const url =
+      this.env.apiUrl + '/api/Employee/' + id;
+    return this.http.delete<
+      IBackendReponse<string>
+    >(url, {
+      headers: {
+        Authorization:
+          'Bearer ' +
+          sessionStorage.getItem('token'),
+      },
+    });
   }
 }

@@ -2,9 +2,11 @@ import {
   ChangeDetectionStrategy,
   Component,
   Input,
-  WritableSignal,
-  signal,
 } from '@angular/core';
+import {
+  ActivatedRoute,
+  Router,
+} from '@angular/router';
 import { IEmployee } from 'src/app/services/employees/employees.service';
 
 @Component({
@@ -22,11 +24,22 @@ export class EmployeesListComponent {
     'position',
     'daysoff',
     'status',
+    'actions',
   ];
   @Input({ required: true })
   employees!: IEmployee[];
-  get getEmployees() {
-    return this.employees;
-  }
+
+  constructor(
+    private router: Router,
+    private activatedRoute: ActivatedRoute
+  ) {}
+
   ngOnInit() {}
+
+  editEmployee(id: string) {
+    this.router.navigate(['update-user'], {
+      relativeTo: this.activatedRoute,
+      queryParams: { id },
+    });
+  }
 }

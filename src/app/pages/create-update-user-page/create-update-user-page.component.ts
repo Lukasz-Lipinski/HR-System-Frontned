@@ -1,4 +1,8 @@
 import { Component } from '@angular/core';
+import {
+  ActivatedRoute,
+  Router,
+} from '@angular/router';
 import { SharedModule } from 'src/app/shared/shared/shared.module';
 
 @Component({
@@ -11,4 +15,16 @@ import { SharedModule } from 'src/app/shared/shared/shared.module';
   standalone: true,
   imports: [SharedModule],
 })
-export class CreateUpdateUserPageComponent {}
+export class CreateUpdateUserPageComponent {
+  constructor(
+    private activatedRoute: ActivatedRoute
+  ) {}
+
+  ngOnInit() {
+    this.activatedRoute.params.subscribe({
+      next: (params) => {
+        console.log(params);
+      },
+    });
+  }
+}

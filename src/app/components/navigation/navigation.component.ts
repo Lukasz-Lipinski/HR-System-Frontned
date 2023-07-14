@@ -19,22 +19,17 @@ export interface ILink {
 export class NavigationComponent {
   private links: ILink[] = [
     {
-      href: '/',
+      href: '/dashboard',
       label: 'Home',
       icon: 'home',
     },
     {
-      href: '/create-user',
+      href: 'create-user',
       label: 'Add User',
       icon: 'add',
     },
     {
-      href: '/update-user-credential',
-      label: 'Modify User Credential',
-      icon: 'edit',
-    },
-    {
-      href: '/account',
+      href: 'account',
       label: 'Account',
       icon: 'person',
     },
@@ -45,6 +40,11 @@ export class NavigationComponent {
 
   setColor(label: string): 'accent' | 'primary' {
     return label.toLowerCase() === 'account'
+      ? 'accent'
+      : 'primary';
+  }
+  setActive(label: string): 'accent' | 'primary' {
+    return label.toLowerCase() !== 'account'
       ? 'accent'
       : 'primary';
   }

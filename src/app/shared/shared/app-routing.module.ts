@@ -55,6 +55,24 @@ const routes: Routes = [
           ).then((m) => m.AccountPageComponent),
       },
       {
+        path: 'create-user',
+        loadComponent: () =>
+          import(
+            '../../pages/create-update-user-page/create-update-user-page.component'
+          ).then(
+            (m) => m.CreateUpdateUserPageComponent
+          ),
+      },
+      {
+        path: 'update-user',
+        loadComponent: () =>
+          import(
+            '../../pages/create-update-user-page/create-update-user-page.component'
+          ).then(
+            (m) => m.CreateUpdateUserPageComponent
+          ),
+      },
+      {
         path: '**',
         redirectTo: 'dashboard',
       },
