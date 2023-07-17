@@ -1,0 +1,78 @@
+<form
+  [formGroup]="getAccountForm"
+  class="form-container"
+>
+  <ng-container
+    *ngFor="let field of getAccountFormFields"
+  >
+    <mat-form-field>
+      <mat-label>{{
+        setLabel(field.name)
+      }}</mat-label>
+      <input
+        matInput
+        [type]="field.type"
+        [placeholder]="field.placeholder"
+        [formControlName]="field.name"
+      />
+      <mat-error>
+        {{ setErrorMessage(field.name) }}
+      </mat-error>
+    </mat-form-field>
+  </ng-container>
+  <mat-form-field>
+    <mat-label>Password</mat-label>
+    <input
+      matNativeControl
+      [type]="getIsVisible ? 'text' : 'password'"
+      placeholder="Assign new password"
+      formControlName="password"
+    />
+    <mat-icon
+      matSuffix
+      (click)="onToggleVisibility()"
+    >
+      {{
+        getIsVisible
+          ? 'visibility'
+          : 'visibility_off'
+      }}
+    </mat-icon>
+    <mat-error>
+      {{ setErrorMessage('password') }}
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Confirm password</mat-label>
+    <input
+      matNativeControl
+      [type]="getIsVisible ? 'text' : 'password'"
+      placeholder="Confirm password"
+      formControlName="confirmPassword"
+    />
+    <mat-icon
+      matSuffix
+      (click)="onToggleVisibility()"
+    >
+      {{
+        getIsVisible
+          ? 'visibility'
+          : 'visibility_off'
+      }}
+    </mat-icon>
+    <mat-error>
+      {{ setErrorMessage('confirmPassword') }}
+    </mat-error>
+  </mat-form-field>
+
+  <div>
+    <button
+      mat-raised-button
+      color="primary"
+      type="submit"
+      [disabled]="getAccountForm.invalid"
+    >
+      Update
+    </button>
+  </div>
+</form>

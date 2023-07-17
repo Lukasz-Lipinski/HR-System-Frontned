@@ -24,6 +24,7 @@ import { SigninFormComponent } from 'src/app/components/signin-form/signin-form.
 import { LoaderProgressComponent } from 'src/app/components/loader-progress/loader-progress.component';
 import { EmployeesListComponent } from 'src/app/components/employees-list/employees-list.component';
 import { SearchComponent } from 'src/app/components/search/search.component';
+import { AccountFormComponent } from 'src/app/components/account-form/account-form.component';
 
 const components: any[] = [
   NavigationComponent,
@@ -32,6 +33,7 @@ const components: any[] = [
   LoaderProgressComponent,
   EmployeesListComponent,
   SearchComponent,
+  AccountFormComponent,
 ];
 
 const modules = [

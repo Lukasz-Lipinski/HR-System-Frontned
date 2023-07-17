@@ -11,6 +11,7 @@ import {
   tap,
 } from 'rxjs';
 import { IBackendReponse } from 'src/app/auth/auth.service';
+import { environment } from 'src/app/env/environment';
 
 export interface IEmployee {
   id: string;
@@ -58,13 +59,14 @@ const mockedEmployees: IEmployee[] = [
 export class EmployeesService {
   constructor(
     private http: HttpClient,
-    @Inject('LocalEnv') private env: any
+    @Inject('LocalEnv')
+    private env: typeof environment
   ) {}
 
   getEmployees(): Observable<IEmployee[]> {
     return this.http
       .get<IBackendReponse<IEmployee[]>>(
-        `${this.env.apiUrl}/api/Employee/all`,
+        `${this.env.apiUrl}/api/employee/all`,
         {
           headers: {
             Authorization:
@@ -92,7 +94,7 @@ export class EmployeesService {
     id: string
   ): Observable<IEmployee | null> {
     const url =
-      this.env.apiUrl + '/api/Employee/' + id;
+      this.env.apiUrl + '/api/employee/' + id;
     return this.http
       .get<IBackendReponse<IEmployee>>(url, {
         headers: {
@@ -119,7 +121,7 @@ export class EmployeesService {
     id: string
   ): Observable<IBackendReponse<string>> {
     const url =
-      this.env.apiUrl + '/api/Employee/' + id;
+      this.env.apiUrl + '/api/employee/' + id;
     return this.http.delete<
       IBackendReponse<string>
     >(url, {
@@ -129,5 +131,28 @@ export class EmployeesService {
           sessionStorage.getItem('token'),
       },
     });
+  }
+  updateEmployeeData(employeeData: IEmployee) {
+    const url =
+      this.env.apiUrl +
+      '/api/employee/update' +
+      employeeData.id;
+    return this.http
+      .put<IBackendReponse<string>>(
+        url,
+        employeeData,
+        {
+          headers: {
+            Authorization:
+              'Bearer' +
+              sessionStorage.getItem('token'),
+          },
+        }
+      )
+      .pipe(
+        catchError((err) => {
+          return of(err);
+        })
+      );
   }
 }

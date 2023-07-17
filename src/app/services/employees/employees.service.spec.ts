@@ -68,4 +68,5 @@ describe('Testing Employee service', () => {
     tick();
   }));
   it('Should delete employee by id', fakeAsync(() => {}));
+  it('Should update employee data', fakeAsync(() => {}));
 });
