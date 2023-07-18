@@ -12,6 +12,14 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
+import {
+  ActivatedRoute,
+  Data,
+} from '@angular/router';
+import {
+  AuthService,
+  IAdminCredential,
+} from 'src/app/auth/auth.service';
 
 export interface IAccountForm {
   email: FormControl<string>;
@@ -28,33 +36,17 @@ export interface IAccountFormField {
   icon?: string;
 }
 
-export function identicalPasswords(
-  control: AbstractControl
+function identicalPasswordsValidator(
+  passwordControl: AbstractControl
 ): ValidatorFn {
   return (
-    controlToCheck: AbstractControl
+    control: AbstractControl
   ): ValidationErrors | null => {
-    const password = control.get('password');
-    const confirmPassword = controlToCheck.get(
-      'confirmPassword'
-    );
-    console.log(
-      '🚀 ~ file: account-form.component.ts:38 ~ password:',
-      password?.value
-    );
-    console.log(
-      '🚀 ~ file: account-form.component.ts:41 ~ confirmPassword:',
-      confirmPassword?.value
-    );
+    const password = passwordControl.value;
+    const confirmPassword = control.value;
 
-    if (password && confirmPassword) {
-      if (
-        password.value !== confirmPassword.value
-      ) {
-        return {
-          identicalPasswords: true,
-        };
-      }
+    if (password !== confirmPassword) {
+      return { notIdentical: true };
     }
 
     return null;
@@ -68,6 +60,7 @@ export function identicalPasswords(
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccountFormComponent {
+  private adminData!: IAdminCredential;
   private accountForm!: FormGroup<IAccountForm>;
   get getAccountForm(): FormGroup<IAccountForm> {
     return this.accountForm;
@@ -99,32 +92,43 @@ export class AccountFormComponent {
     return this.accountFormFields;
   }
 
-  constructor() {}
+  constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
+    this.adminData =
+      this.authService.adminCredential.value!;
     this.accountForm =
       new FormGroup<IAccountForm>({
-        email: new FormControl<string>('', {
-          nonNullable: true,
-          validators: [
-            Validators.required,
-            Validators.email,
-          ],
-        }),
-        name: new FormControl<string>('', {
-          nonNullable: true,
-          validators: [
-            Validators.required,
-            Validators.minLength(4),
-          ],
-        }),
-        surname: new FormControl<string>('', {
-          nonNullable: true,
-          validators: [
-            Validators.required,
-            Validators.minLength(4),
-          ],
-        }),
+        email: new FormControl<string>(
+          this.adminData.email,
+          {
+            nonNullable: true,
+            validators: [
+              Validators.required,
+              Validators.email,
+            ],
+          }
+        ),
+        name: new FormControl<string>(
+          this.adminData.name,
+          {
+            nonNullable: true,
+            validators: [
+              Validators.required,
+              Validators.minLength(4),
+            ],
+          }
+        ),
+        surname: new FormControl<string>(
+          this.adminData.surname,
+          {
+            nonNullable: true,
+            validators: [
+              Validators.required,
+              Validators.minLength(4),
+            ],
+          }
+        ),
         password: new FormControl<string>('', {
           nonNullable: true,
           validators: [
@@ -143,10 +147,9 @@ export class AccountFormComponent {
           }
         ),
       });
-    this.accountForm.controls[
-      'confirmPassword'
-    ].addValidators(
-      identicalPasswords(
+
+    this.accountForm.controls.confirmPassword.addValidators(
+      identicalPasswordsValidator(
         this.accountForm.controls['password']
       )
     );
@@ -181,6 +184,7 @@ export class AccountFormComponent {
 
     return this.findError(error, length);
   }
+  isFormValid = () => this.accountForm.invalid;
   private findError(
     error: string,
     length: number
@@ -192,7 +196,7 @@ export class AccountFormComponent {
         return `Minimum length must be ${length}`;
       case 'email':
         return 'Invalid email address';
-      case 'identicalPasswords':
+      case 'notIdentical':
         return 'Passwords do not match';
       default:
         return;

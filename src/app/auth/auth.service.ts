@@ -10,6 +10,7 @@ import {
   map,
   tap,
 } from 'rxjs';
+import { environment } from '../env/environment';
 
 export interface IBodyRequestLogin {
   email: string;
@@ -22,7 +23,7 @@ export interface IBodyRequestRegister
   surname: string;
 }
 
-export interface AdminCredential {
+export interface IAdminCredential {
   name: string;
   surname: string;
   email: string;
@@ -41,14 +42,15 @@ export interface IBackendReponse<T> {
 })
 export class AuthService implements OnInit {
   adminCredential: BehaviorSubject<
-    AdminCredential | undefined
+    IAdminCredential | undefined
   > = new BehaviorSubject<
-    AdminCredential | undefined
+    IAdminCredential | undefined
   >(undefined);
 
   constructor(
     private http: HttpClient,
-    @Inject('LocalEnv') private environment: any
+    @Inject('LocalEnv')
+    private env: typeof environment
   ) {}
 
   ngOnInit(): void {}
@@ -56,11 +58,11 @@ export class AuthService implements OnInit {
   Login(
     userCred: IBodyRequestLogin
   ): Observable<
-    IBackendReponse<AdminCredential>
+    IBackendReponse<IAdminCredential>
   > {
     return this.http
-      .post<IBackendReponse<AdminCredential>>(
-        `${this.environment.apiUrl}/api/Admin/login`,
+      .post<IBackendReponse<IAdminCredential>>(
+        `${this.env.apiUrl}/api/admin/login`,
         userCred
       )
       .pipe(
@@ -79,12 +81,12 @@ export class AuthService implements OnInit {
   Register(
     userCred: IBodyRequestRegister
   ): Observable<
-    IBackendReponse<AdminCredential>
+    IBackendReponse<IAdminCredential>
   > {
     return this.http.post<
-      IBackendReponse<AdminCredential>
+      IBackendReponse<IAdminCredential>
     >(
-      `${this.environment}/Admin/register`,
+      `${this.env.apiUrl}/api/admin/register`,
       userCred
     );
   }
@@ -95,11 +97,11 @@ export class AuthService implements OnInit {
 
     if (adminToken) {
       this.http
-        .get<IBackendReponse<AdminCredential>>(
-          `${this.environment}/Admin`,
+        .get<IBackendReponse<IAdminCredential>>(
+          `${this.env.apiUrl}/api/admin`,
           {
             headers: {
-              Authorization: `${adminToken}`,
+              Authorization: `Bearer ${adminToken}`,
             },
           }
         )

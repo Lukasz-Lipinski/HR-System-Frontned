@@ -20,57 +20,67 @@
       </mat-error>
     </mat-form-field>
   </ng-container>
-  <mat-form-field>
-    <mat-label>Password</mat-label>
-    <input
-      matNativeControl
-      [type]="getIsVisible ? 'text' : 'password'"
-      placeholder="Assign new password"
-      formControlName="password"
-    />
-    <mat-icon
-      matSuffix
-      (click)="onToggleVisibility()"
-    >
-      {{
-        getIsVisible
-          ? 'visibility'
-          : 'visibility_off'
-      }}
-    </mat-icon>
-    <mat-error>
-      {{ setErrorMessage('password') }}
-    </mat-error>
-  </mat-form-field>
-  <mat-form-field>
-    <mat-label>Confirm password</mat-label>
-    <input
-      matNativeControl
-      [type]="getIsVisible ? 'text' : 'password'"
-      placeholder="Confirm password"
-      formControlName="confirmPassword"
-    />
-    <mat-icon
-      matSuffix
-      (click)="onToggleVisibility()"
-    >
-      {{
-        getIsVisible
-          ? 'visibility'
-          : 'visibility_off'
-      }}
-    </mat-icon>
-    <mat-error>
-      {{ setErrorMessage('confirmPassword') }}
-    </mat-error>
-  </mat-form-field>
+  <div class="padding-top">
+    <mat-form-field>
+      <mat-label>Password</mat-label>
+      <input
+        matNativeControl
+        [type]="
+          getIsVisible ? 'text' : 'password'
+        "
+        placeholder="Assign new password"
+        formControlName="password"
+      />
+      <mat-icon
+        matSuffix
+        (click)="onToggleVisibility()"
+      >
+        {{
+          getIsVisible
+            ? 'visibility'
+            : 'visibility_off'
+        }}
+      </mat-icon>
+      <mat-error>
+        {{ setErrorMessage('password') }}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Confirm password</mat-label>
+      <input
+        matNativeControl
+        [type]="
+          getIsVisible ? 'text' : 'password'
+        "
+        placeholder="Confirm password"
+        formControlName="confirmPassword"
+      />
+      <mat-icon
+        matSuffix
+        (click)="onToggleVisibility()"
+      >
+        {{
+          getIsVisible
+            ? 'visibility'
+            : 'visibility_off'
+        }}
+      </mat-icon>
+      <mat-error>
+        {{ setErrorMessage('confirmPassword') }}
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <mat-hint class="container">
+    To change your credential, write password and
+    confirm it
+  </mat-hint>
 
-  <div>
+  <div class="padding-top">
     <button
       mat-raised-button
       color="primary"
       type="submit"
-      [disabled]="getAccountForm.invalid"
+      [disabled]="isFormValid()"
     >
       Update
     </button>

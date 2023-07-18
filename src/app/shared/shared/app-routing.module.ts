@@ -1,9 +1,18 @@
-import { NgModule } from '@angular/core';
+import { NgModule, inject } from '@angular/core';
 import {
+  ActivatedRouteSnapshot,
+  ResolveFn,
   RouterModule,
+  RouterStateSnapshot,
   Routes,
 } from '@angular/router';
+import { Observable } from 'rxjs';
 import { AppComponent } from 'src/app/app.component';
+import {
+  AuthService,
+  IAdminCredential,
+} from 'src/app/auth/auth.service';
+import { accountPageResolver } from 'src/app/pages/account-page/account-page.resolver';
 import { checkIfLoggedGuard } from 'src/app/pages/dashboard-page/main/check-If-Logged-Guard.guard';
 import { dashboardMainPageResolver } from 'src/app/pages/dashboard-page/main/dashboard-main-page.resolver';
 import { signInPageGuard } from 'src/app/pages/sign-in-page/sign-in-page.guard';
@@ -53,6 +62,9 @@ const routes: Routes = [
           import(
             '../../pages/account-page/account-page.component'
           ).then((m) => m.AccountPageComponent),
+        resolve: {
+          adminCred: accountPageResolver,
+        },
       },
       {
         path: 'create-user',

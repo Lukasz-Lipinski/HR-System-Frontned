@@ -13,10 +13,8 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
-import {
-  MatTable,
-  MatTableModule,
-} from '@angular/material/table';
+import { MatTableModule } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { NavigationComponent } from 'src/app/components/navigation/navigation.component';
 import { LoaderComponent } from 'src/app/components/loader/loader.component';
@@ -51,6 +49,7 @@ const modules = [
   MatSidenavModule,
   MatTableModule,
   MatGridListModule,
+  MatTooltipModule,
 ];
 
 @NgModule({
