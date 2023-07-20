@@ -10,7 +10,7 @@ import {
   of,
   tap,
 } from 'rxjs';
-import { IBackendReponse } from 'src/app/auth/auth.service';
+import { IBackendReponse } from 'src/app/services/auth/auth.service';
 import { environment } from 'src/app/env/environment';
 
 export interface IEmployee {
@@ -32,26 +32,6 @@ export interface ISuperior {
   area: string;
   position: string;
 }
-
-const mockedEmployees: IEmployee[] = [
-  {
-    id: 'alsgjogajoj',
-    name: 'John',
-    surname: 'Doe',
-    email: 'johndoe@example.com',
-    role: 1,
-    position: 'Software Engineer',
-    daysoff: 2,
-    status: 1,
-    superior: {
-      name: 'Jane',
-      surname: 'Doe',
-      email: 'janedoe@example.com',
-      area: 'Sales',
-      position: 'Manager',
-    },
-  },
-];
 
 @Injectable({
   providedIn: 'root',
@@ -81,11 +61,11 @@ export class EmployeesService {
             error: true,
             code: 401,
             message: 'Unauthorized',
-            data: mockedEmployees,
+            data: [],
           });
         }),
         map((res) => {
-          return res.data ? res.data : [];
+          return res.data;
         })
       );
   }

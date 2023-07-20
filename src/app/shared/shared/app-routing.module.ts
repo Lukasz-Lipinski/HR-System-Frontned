@@ -1,27 +1,23 @@
-import { NgModule, inject } from '@angular/core';
+import { NgModule } from '@angular/core';
 import {
-  ActivatedRouteSnapshot,
-  ResolveFn,
   RouterModule,
-  RouterStateSnapshot,
   Routes,
 } from '@angular/router';
-import { Observable } from 'rxjs';
 import { AppComponent } from 'src/app/app.component';
-import {
-  AuthService,
-  IAdminCredential,
-} from 'src/app/auth/auth.service';
 import { accountPageResolver } from 'src/app/pages/account-page/account-page.resolver';
-import { checkIfLoggedGuard } from 'src/app/pages/dashboard-page/main/check-If-Logged-Guard.guard';
 import { dashboardMainPageResolver } from 'src/app/pages/dashboard-page/main/dashboard-main-page.resolver';
-import { signInPageGuard } from 'src/app/pages/sign-in-page/sign-in-page.guard';
+import {
+  CheckIfLoggedGuard,
+  SignInPageGuard,
+  CheckAuthGuard,
+  CheckIfSubpageCanActivate,
+} from 'src/app/services/guards/check-auth.guard';
 
 const routes: Routes = [
   {
     path: '',
     component: AppComponent,
-    canActivate: [checkIfLoggedGuard],
+    canActivate: [CheckIfLoggedGuard],
   },
   {
     path: 'sign-in',
@@ -29,7 +25,7 @@ const routes: Routes = [
       import(
         '../../pages/sign-in-page/sign-in-page.component'
       ).then((m) => m.SignInPageComponent),
-    canActivate: [signInPageGuard],
+    canActivate: [SignInPageGuard],
   },
   {
     path: 'registration',
@@ -44,7 +40,8 @@ const routes: Routes = [
       import(
         '../../pages/dashboard-page/dashboard-page.component'
       ).then((m) => m.DashboardPageComponent),
-    // canMatch: [checkIfLoggedGuard],
+    canActivate: [CheckAuthGuard],
+    canActivateChild: [CheckIfSubpageCanActivate],
     children: [
       {
         path: '',

@@ -15,7 +15,7 @@ import { Router } from '@angular/router';
 import {
   AuthService,
   IBodyRequestLogin,
-} from 'src/app/auth/auth.service';
+} from 'src/app/services/auth/auth.service';
 
 export interface ISigninForm {
   email: FormControl<string>;
@@ -24,7 +24,7 @@ export interface ISigninForm {
 
 export interface ISigninFormControl {
   name: string;
-  type: 'text' | 'number' | 'email';
+  type: 'text' | 'number' | 'email' | 'password';
   label: string;
   placeholder: string;
 }
@@ -59,7 +59,7 @@ export class SigninFormComponent {
       },
       {
         name: 'password',
-        type: 'text',
+        type: 'password',
         label: 'Password',
         placeholder: 'example password',
       },

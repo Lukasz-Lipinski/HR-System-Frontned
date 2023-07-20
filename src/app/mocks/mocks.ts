@@ -1,9 +1,9 @@
 import {
-  AdminCredential,
+  IAdminCredential,
   IBackendReponse,
   IBodyRequestLogin,
   IBodyRequestRegister,
-} from '../auth/auth.service';
+} from '../services/auth/auth.service';
 import { ILink } from '../components/navigation/navigation.component';
 import {
   IEmployee,
@@ -32,7 +32,7 @@ export const mockedBodyRequestLogin: IBodyRequestLogin =
     password: 'password123',
   };
 
-export const mockedAdminCredential: AdminCredential =
+export const mockedAdminCredential: IAdminCredential =
   {
     name: 'John',
     surname: 'Doe',
@@ -40,7 +40,7 @@ export const mockedAdminCredential: AdminCredential =
     token: 'your-auth-token',
   };
 
-export const mockedBackendResponse: IBackendReponse<AdminCredential> =
+export const mockedBackendResponse: IBackendReponse<IAdminCredential> =
   {
     code: 200,
     data: mockedAdminCredential,
@@ -53,7 +53,7 @@ export const mockedEnvironment = {
 };
 export const mockedLinks: ILink[] = [
   {
-    href: '',
+    href: '/dashboard',
     label: 'Home',
     icon: 'home',
   },

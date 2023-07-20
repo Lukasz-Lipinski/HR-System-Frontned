@@ -1,5 +1,6 @@
 <form
   [formGroup]="getAccountForm"
+  (ngSubmit)="onSubmit()"
   class="form-container"
 >
   <ng-container
@@ -21,26 +22,16 @@
     </mat-form-field>
   </ng-container>
   <div class="padding-top">
-    <mat-form-field>
+    <mat-form-field class="box-inline">
       <mat-label>Password</mat-label>
       <input
         matNativeControl
         [type]="
-          getIsVisible ? 'text' : 'password'
+          getIsVisible() ? 'text' : 'password'
         "
         placeholder="Assign new password"
         formControlName="password"
       />
-      <mat-icon
-        matSuffix
-        (click)="onToggleVisibility()"
-      >
-        {{
-          getIsVisible
-            ? 'visibility'
-            : 'visibility_off'
-        }}
-      </mat-icon>
       <mat-error>
         {{ setErrorMessage('password') }}
       </mat-error>
@@ -50,25 +41,27 @@
       <input
         matNativeControl
         [type]="
-          getIsVisible ? 'text' : 'password'
+          getIsVisible() ? 'text' : 'password'
         "
         placeholder="Confirm password"
         formControlName="confirmPassword"
       />
-      <mat-icon
-        matSuffix
-        (click)="onToggleVisibility()"
-      >
-        {{
-          getIsVisible
-            ? 'visibility'
-            : 'visibility_off'
-        }}
-      </mat-icon>
       <mat-error>
         {{ setErrorMessage('confirmPassword') }}
       </mat-error>
     </mat-form-field>
+    <button
+      mat-icon-button
+      (click)="onToggleVisibility()"
+    >
+      <mat-icon>
+        {{
+          getIsVisible()
+            ? 'visibility_off'
+            : 'visibility'
+        }}
+      </mat-icon>
+    </button>
   </div>
   <mat-hint class="container">
     To change your credential, write password and
@@ -80,7 +73,7 @@
       mat-raised-button
       color="primary"
       type="submit"
-      [disabled]="isFormValid()"
+      [disabled]="!isFormValid()"
     >
       Update
     </button>

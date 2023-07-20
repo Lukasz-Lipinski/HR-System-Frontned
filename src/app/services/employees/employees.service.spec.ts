@@ -21,7 +21,7 @@ describe('Testing Employee service', () => {
   let controller: HttpTestingController;
   let service: EmployeesService;
   const url =
-    mockedEnvironment.apiUrl + '/api/Employee';
+    mockedEnvironment.apiUrl + '/api/employee';
 
   beforeEach(() => {
     TestBed.configureTestingModule({

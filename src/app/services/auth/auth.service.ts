@@ -10,7 +10,7 @@ import {
   map,
   tap,
 } from 'rxjs';
-import { environment } from '../env/environment';
+import { environment } from '../../env/environment';
 
 export interface IBodyRequestLogin {
   email: string;

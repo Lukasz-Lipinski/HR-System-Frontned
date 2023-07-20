@@ -1,11 +1,14 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  EventEmitter,
+  Output,
   WritableSignal,
   signal,
 } from '@angular/core';
 import {
   AbstractControl,
+  AsyncValidatorFn,
   FormControl,
   FormGroup,
   ValidationErrors,
@@ -13,13 +16,9 @@ import {
   Validators,
 } from '@angular/forms';
 import {
-  ActivatedRoute,
-  Data,
-} from '@angular/router';
-import {
   AuthService,
   IAdminCredential,
-} from 'src/app/auth/auth.service';
+} from 'src/app/services/auth/auth.service';
 
 export interface IAccountForm {
   email: FormControl<string>;
@@ -53,6 +52,23 @@ function identicalPasswordsValidator(
   };
 }
 
+function ValidatePasswordOnBackend(): AsyncValidatorFn {
+  return (
+    control: AbstractControl
+  ): Promise<ValidationErrors | null> => {
+    return new Promise((resolve, reject) => {
+      const password = control.value;
+      const confirmPassword = control.value;
+
+      if (password !== confirmPassword) {
+        resolve({ notIdentical: true });
+      } else {
+        resolve(null);
+      }
+    });
+  };
+}
+
 @Component({
   selector: 'app-account-form',
   templateUrl: './account-form.component.html',
@@ -60,15 +76,16 @@ function identicalPasswordsValidator(
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccountFormComponent {
+  @Output() formEmitter =
+    new EventEmitter<IAdminCredential>();
   private adminData!: IAdminCredential;
   private accountForm!: FormGroup<IAccountForm>;
   get getAccountForm(): FormGroup<IAccountForm> {
     return this.accountForm;
   }
-  private isVisible: WritableSignal<boolean> =
-    signal<boolean>(false);
-  get getIsVisible(): boolean {
-    return this.isVisible();
+  private isVisible = signal<boolean>(false);
+  get getIsVisible() {
+    return this.isVisible.asReadonly();
   }
   private accountFormFields: IAccountFormField[] =
     [
@@ -91,6 +108,7 @@ export class AccountFormComponent {
   get getAccountFormFields(): IAccountFormField[] {
     return this.accountFormFields;
   }
+  isFormValid = () => this.accountForm.valid;
 
   constructor(private authService: AuthService) {}
 
@@ -144,6 +162,7 @@ export class AccountFormComponent {
               Validators.required,
               Validators.minLength(6),
             ],
+            asyncValidators: [],
           }
         ),
       });
@@ -156,6 +175,7 @@ export class AccountFormComponent {
   }
 
   onToggleVisibility() {
+    console.log(this.isVisible());
     this.isVisible.set(!this.isVisible());
   }
   setLabel(label: string): string {
@@ -184,7 +204,7 @@ export class AccountFormComponent {
 
     return this.findError(error, length);
   }
-  isFormValid = () => this.accountForm.invalid;
+
   private findError(
     error: string,
     length: number
@@ -200,6 +220,19 @@ export class AccountFormComponent {
         return 'Passwords do not match';
       default:
         return;
+    }
+  }
+  onSubmit() {
+    if (this.isFormValid()) {
+      const { email, name, surname } =
+        this.accountForm.controls;
+      const updatedAdminData: IAdminCredential = {
+        email: email.value,
+        name: name.value,
+        surname: surname.value,
+        token: '',
+      };
+      this.formEmitter.emit(updatedAdminData);
     }
   }
 }

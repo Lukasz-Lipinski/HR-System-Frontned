@@ -5,7 +5,7 @@ import {
 } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { SigninFormComponent } from './signin-form.component';
-import { AuthService } from 'src/app/auth/auth.service';
+import { AuthService } from 'src/app/services/auth/auth.service';
 import { By } from '@angular/platform-browser';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import {
@@ -16,7 +16,6 @@ import {
 } from 'src/app/mocks/mocks';
 import { MatProgressSpinnerHarness } from '@angular/material/progress-spinner/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 describe('Testing SigninFormComponent', () => {
   let fixture: ComponentFixture<SigninFormComponent>;

@@ -23,7 +23,7 @@ export class MainComponent {
   private employees: WritableSignal<IEmployee[]> =
     signal<IEmployee[]>([]);
   get getEmployeesSignal() {
-    return this.employees();
+    return this.employees.asReadonly();
   }
   constructor(
     private activatedRoute: ActivatedRoute

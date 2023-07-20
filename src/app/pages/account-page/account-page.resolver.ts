@@ -3,7 +3,7 @@ import { ResolveFn } from '@angular/router';
 import {
   AuthService,
   IAdminCredential,
-} from 'src/app/auth/auth.service';
+} from 'src/app/services/auth/auth.service';
 
 export const accountPageResolver: ResolveFn<
   IAdminCredential | undefined

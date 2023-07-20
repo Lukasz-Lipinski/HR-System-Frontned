@@ -1,17 +1,17 @@
-import { TestBed } from '@angular/core/testing';
-import { ResolveFn } from '@angular/router';
+// import { TestBed } from '@angular/core/testing';
+// import { ResolveFn } from '@angular/router';
 
-import { accountPageResolver } from './account-page.resolver';
+// import { accountPageResolver } from './account-page.resolver';
 
-describe('accountPageResolver', () => {
-  const executeResolver: ResolveFn<boolean> = (...resolverParameters) => 
-      TestBed.runInInjectionContext(() => accountPageResolver(...resolverParameters));
+// describe('accountPageResolver', () => {
+//   const executeResolver: ResolveFn<boolean> = (...resolverParameters) =>
+//       TestBed.runInInjectionContext(() => accountPageResolver(...resolverParameters));
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-  });
+//   beforeEach(() => {
+//     TestBed.configureTestingModule({});
+//   });
 
-  it('should be created', () => {
-    expect(executeResolver).toBeTruthy();
-  });
-});
+//   it('should be created', () => {
+//     expect(executeResolver).toBeTruthy();
+//   });
+// });

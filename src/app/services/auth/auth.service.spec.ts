@@ -14,13 +14,13 @@ import {
   mockedBackendResponse,
   mockedBodyRequestLogin,
   mockedEnvironment,
-} from '../mocks/mocks';
+} from '../../mocks/mocks';
 
 describe('Testing AuthService', () => {
   let service: AuthService;
   let testingController: HttpTestingController;
   const mockedUrl =
-    mockedEnvironment.apiUrl + '/api/Admin/login';
+    mockedEnvironment.apiUrl + '/api/admin/login';
 
   beforeEach(() => {
     TestBed.configureTestingModule({

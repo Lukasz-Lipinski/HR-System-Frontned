@@ -15,6 +15,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatTabsModule } from '@angular/material/tabs';
 
 import { NavigationComponent } from 'src/app/components/navigation/navigation.component';
 import { LoaderComponent } from 'src/app/components/loader/loader.component';
@@ -23,6 +24,7 @@ import { LoaderProgressComponent } from 'src/app/components/loader-progress/load
 import { EmployeesListComponent } from 'src/app/components/employees-list/employees-list.component';
 import { SearchComponent } from 'src/app/components/search/search.component';
 import { AccountFormComponent } from 'src/app/components/account-form/account-form.component';
+import { PasswordFormComponent } from 'src/app/components/password-form/password-form.component';
 
 const components: any[] = [
   NavigationComponent,
@@ -32,9 +34,11 @@ const components: any[] = [
   EmployeesListComponent,
   SearchComponent,
   AccountFormComponent,
+  PasswordFormComponent,
 ];
 
 const modules = [
+  MatTabsModule,
   MatFormFieldModule,
   MatIconModule,
   MatInputModule,

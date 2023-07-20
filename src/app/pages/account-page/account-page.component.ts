@@ -2,6 +2,10 @@ import {
   ChangeDetectionStrategy,
   Component,
 } from '@angular/core';
+import {
+  AuthService,
+  IAdminCredential,
+} from 'src/app/services/auth/auth.service';
 import { SharedModule } from 'src/app/shared/shared/shared.module';
 
 @Component({
@@ -12,4 +16,10 @@ import { SharedModule } from 'src/app/shared/shared/shared.module';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
 })
-export class AccountPageComponent {}
+export class AccountPageComponent {
+  constructor(private authService: AuthService) {}
+  onSubmit(adminCredentials: IAdminCredential) {
+    console.log(adminCredentials);
+    // this.authService.
+  }
+}
