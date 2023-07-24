@@ -35,3 +35,10 @@ body {
     }
   }
 }
+
+.error-snackbar {
+  .mdc-snackbar__surface {
+    color: white;
+    background: #F44336 !important;
+  }
+}

@@ -1,4 +1,17 @@
-import { Component } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  inject,
+} from '@angular/core';
+import {
+  ActivatedRoute,
+  Data,
+} from '@angular/router';
+import { Observable, switchMap } from 'rxjs';
+import {
+  AuthService,
+  IAdminCredential,
+} from 'src/app/services/auth/auth.service';
 import { SharedModule } from 'src/app/shared/shared/shared.module';
 
 @Component({

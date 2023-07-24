@@ -40,8 +40,8 @@ const routes: Routes = [
       import(
         '../../pages/dashboard-page/dashboard-page.component'
       ).then((m) => m.DashboardPageComponent),
-    canActivate: [CheckAuthGuard],
-    canActivateChild: [CheckIfSubpageCanActivate],
+    // canActivate: [CheckAuthGuard],
+    // canActivateChild: [CheckIfSubpageCanActivate],
     children: [
       {
         path: '',
@@ -51,6 +51,7 @@ const routes: Routes = [
           ).then((m) => m.MainComponent),
         resolve: {
           employees: dashboardMainPageResolver,
+          adminCred: accountPageResolver,
         },
       },
       {

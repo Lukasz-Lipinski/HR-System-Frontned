@@ -4,10 +4,14 @@ import {
   Injectable,
   OnInit,
 } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import {
   BehaviorSubject,
   Observable,
+  catchError,
   map,
+  of,
+  switchMap,
   tap,
 } from 'rxjs';
 import { environment } from '../../env/environment';
@@ -46,6 +50,9 @@ export class AuthService implements OnInit {
   > = new BehaviorSubject<
     IAdminCredential | undefined
   >(undefined);
+  adminCredentialSignal = toSignal(
+    this.adminCredential
+  );
 
   constructor(
     private http: HttpClient,
@@ -91,26 +98,89 @@ export class AuthService implements OnInit {
     );
   }
 
-  SetAdminCred() {
-    const adminToken =
-      sessionStorage.getItem('token');
-
-    if (adminToken) {
-      this.http
-        .get<IBackendReponse<IAdminCredential>>(
-          `${this.env.apiUrl}/api/admin`,
-          {
-            headers: {
-              Authorization: `Bearer ${adminToken}`,
-            },
-          }
-        )
-        .subscribe({
-          next: (res) => {
-            this.adminCredential.next(res.data);
+  GetAdminCred(): Observable<
+    IAdminCredential | undefined
+  > {
+    return this.http
+      .get<IBackendReponse<IAdminCredential>>(
+        `${this.env.apiUrl}/api/admin`,
+        {
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem(
+              'token'
+            )}`,
           },
-        });
-    }
+        }
+      )
+      .pipe(
+        map((res) => {
+          this.adminCredential.next(res.data);
+          return res.data;
+        })
+      );
+  }
+
+  checkPassword(
+    password: string
+  ): Observable<boolean> {
+    const url = `${this.env.apiUrl}/api/admin/check-password`;
+    return this.http
+      .post<IBackendReponse<boolean>>(
+        url,
+        {
+          email:
+            this.adminCredentialSignal()!.email,
+          password,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem(
+              'token'
+            )}`,
+          },
+        }
+      )
+      .pipe(
+        catchError((err) => {
+          const res: IBackendReponse<boolean> = {
+            code: err.status,
+            data: false,
+            error: true,
+            message: err.statusText,
+          };
+          return of(res);
+        }),
+        map((state) => state.data)
+      );
+  }
+
+  ChangeAdminCredential(
+    adminCred: IAdminCredential
+  ): Observable<IBackendReponse<string>> {
+    const url =
+      this.env.apiUrl +
+      '/api/admin/update-credentials';
+    return this.http
+      .put<IBackendReponse<string>>(
+        url,
+        adminCred,
+        {
+          headers: {
+            Authorization:
+              'Bearer ' +
+              sessionStorage.getItem('token'),
+          },
+        }
+      )
+      .pipe(
+        catchError((err) =>
+          of({
+            error: true,
+            data: 'Invalid data',
+          } as IBackendReponse<string>)
+        ),
+        map((res) => res)
+      );
   }
 
   Logout() {}

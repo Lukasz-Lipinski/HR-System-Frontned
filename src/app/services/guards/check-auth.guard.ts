@@ -10,6 +10,7 @@ import {
   UrlSegment,
 } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
+import { of, switchMap } from 'rxjs';
 
 export const CheckAuthGuard: CanActivateFn = (
   route: ActivatedRouteSnapshot,
@@ -33,26 +34,22 @@ export const SignInPageGuard: CanActivateFn = (
     sessionStorage.getItem('token');
 
   if (localToken) {
-    auth.SetAdminCred();
     return router.createUrlTree(['dashboard']);
   }
-
   return true;
 };
 
 export const CheckIfLoggedGuard: CanActivateFn = (
-  route,
-  state
+  route: ActivatedRouteSnapshot,
+  state: RouterStateSnapshot
 ) => {
-  const authService = inject(AuthService);
   const router = inject(Router);
-  const adminCred =
-    authService.adminCredential.getValue();
   const token = sessionStorage.getItem('token');
 
-  return adminCred && token
-    ? router.createUrlTree(['dashboard'])
-    : router.createUrlTree(['sign-in']);
+  if (token) {
+    return router.createUrlTree(['dashboard']);
+  }
+  return router.createUrlTree(['sign-in']);
 };
 
 export const CheckIfSubpageCanActivate: CanActivateChildFn =
@@ -63,8 +60,18 @@ export const CheckIfSubpageCanActivate: CanActivateChildFn =
     const auth = inject(AuthService);
     const router = inject(Router);
     const user = auth.adminCredential.getValue();
-    console.log(user);
-    return user
-      ? true
-      : router.createUrlTree(['sign-in']);
+
+    if (user) {
+      console.log(
+        '🚀 ~ file: check-auth.guard.ts:76 ~ user:',
+        user
+      );
+
+      return true;
+    }
+
+    return false;
+    // return user
+    //   ? true
+    //   : router.createUrlTree(['sign-in']);
   };

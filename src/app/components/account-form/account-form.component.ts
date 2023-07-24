@@ -4,6 +4,7 @@ import {
   EventEmitter,
   Output,
   WritableSignal,
+  inject,
   signal,
 } from '@angular/core';
 import {
@@ -15,6 +16,7 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
+import { Observable, map } from 'rxjs';
 import {
   AuthService,
   IAdminCredential,
@@ -49,23 +51,6 @@ function identicalPasswordsValidator(
     }
 
     return null;
-  };
-}
-
-function ValidatePasswordOnBackend(): AsyncValidatorFn {
-  return (
-    control: AbstractControl
-  ): Promise<ValidationErrors | null> => {
-    return new Promise((resolve, reject) => {
-      const password = control.value;
-      const confirmPassword = control.value;
-
-      if (password !== confirmPassword) {
-        resolve({ notIdentical: true });
-      } else {
-        resolve(null);
-      }
-    });
   };
 }
 
@@ -151,7 +136,7 @@ export class AccountFormComponent {
           nonNullable: true,
           validators: [
             Validators.required,
-            Validators.minLength(6),
+            Validators.minLength(3),
           ],
         }),
         confirmPassword: new FormControl<string>(
@@ -160,9 +145,12 @@ export class AccountFormComponent {
             nonNullable: true,
             validators: [
               Validators.required,
-              Validators.minLength(6),
+              Validators.minLength(3),
             ],
-            asyncValidators: [],
+            asyncValidators: [
+              this.ValidatePasswordOnBackend,
+            ],
+            updateOn: 'blur',
           }
         ),
       });
@@ -175,7 +163,6 @@ export class AccountFormComponent {
   }
 
   onToggleVisibility() {
-    console.log(this.isVisible());
     this.isVisible.set(!this.isVisible());
   }
   setLabel(label: string): string {
@@ -218,6 +205,8 @@ export class AccountFormComponent {
         return 'Invalid email address';
       case 'notIdentical':
         return 'Passwords do not match';
+      case 'invalidPassword':
+        return 'Invalid password';
       default:
         return;
     }
@@ -235,4 +224,17 @@ export class AccountFormComponent {
       this.formEmitter.emit(updatedAdminData);
     }
   }
+
+  private ValidatePasswordOnBackend: AsyncValidatorFn =
+    (
+      control: AbstractControl
+    ): Observable<ValidationErrors | null> => {
+      return this.authService
+        .checkPassword(control.value)
+        .pipe(
+          map((res) =>
+            res ? null : { invalidPassword: true }
+          )
+        );
+    };
 }

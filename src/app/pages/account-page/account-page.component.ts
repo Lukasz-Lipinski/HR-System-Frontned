@@ -1,7 +1,9 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  inject,
 } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import {
   AuthService,
   IAdminCredential,
@@ -17,9 +19,24 @@ import { SharedModule } from 'src/app/shared/shared/shared.module';
   standalone: true,
 })
 export class AccountPageComponent {
-  constructor(private authService: AuthService) {}
+  private authService: AuthService =
+    inject(AuthService);
+  private snackbar: MatSnackBar =
+    inject(MatSnackBar);
+
+  constructor() {}
   onSubmit(adminCredentials: IAdminCredential) {
-    console.log(adminCredentials);
-    // this.authService.
+    this.authService
+      .ChangeAdminCredential(adminCredentials)
+      .subscribe({
+        next: (res) => {
+          this.snackbar.open(res.data, 'Close', {
+            duration: 3000,
+            panelClass: res.error
+              ? ['error-snackbar']
+              : '',
+          });
+        },
+      });
   }
 }
