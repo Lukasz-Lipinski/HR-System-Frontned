@@ -136,7 +136,7 @@ export class AccountFormComponent {
           nonNullable: true,
           validators: [
             Validators.required,
-            Validators.minLength(3),
+            Validators.minLength(6),
           ],
         }),
         confirmPassword: new FormControl<string>(
@@ -145,7 +145,7 @@ export class AccountFormComponent {
             nonNullable: true,
             validators: [
               Validators.required,
-              Validators.minLength(3),
+              Validators.minLength(6),
             ],
             asyncValidators: [
               this.ValidatePasswordOnBackend,

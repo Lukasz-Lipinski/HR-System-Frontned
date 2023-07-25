@@ -15,6 +15,7 @@ import {
   tap,
 } from 'rxjs';
 import { environment } from '../../env/environment';
+import { ValidationErrors } from '@angular/forms';
 
 export interface IBodyRequestLogin {
   email: string;
@@ -180,6 +181,71 @@ export class AuthService implements OnInit {
           } as IBackendReponse<string>)
         ),
         map((res) => res)
+      );
+  }
+
+  ChangePassword(
+    password: string
+  ): Observable<string> {
+    const url =
+      this.env.apiUrl +
+      '/api/admin/change-password';
+    return this.http
+      .put<IBackendReponse<string>>(
+        url,
+        password,
+        {
+          headers: {
+            Authorization:
+              'Bearer ' +
+              sessionStorage.getItem('token'),
+          },
+        }
+      )
+      .pipe(
+        catchError((err) =>
+          of({
+            data: err.message,
+          } as IBackendReponse<string>)
+        ),
+        map((res) => res.data)
+      );
+  }
+
+  CheckEmail(
+    email: string
+  ): Observable<ValidationErrors | null> {
+    const url =
+      this.env.apiUrl + '/api/admin/check-email';
+
+    return this.http
+      .post<IBackendReponse<boolean>>(
+        url,
+        {
+          Email: email,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      )
+      .pipe(
+        catchError((err) => {
+          const res: IBackendReponse<boolean> = {
+            code: err.code,
+            error: err.message,
+            message: err.message,
+            data: true,
+          };
+
+          return of(res);
+        }),
+        map((res) => {
+          return res.data
+            ? { isInRegistered: true }
+            : null;
+        })
       );
   }
 

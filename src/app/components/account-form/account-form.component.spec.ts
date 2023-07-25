@@ -20,6 +20,7 @@ import { FormGroup } from '@angular/forms';
 import { SharedModule } from 'src/app/shared/shared/shared.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { By } from '@angular/platform-browser';
+import { of } from 'rxjs';
 
 describe('Testing AccountForm Component', () => {
   let fixture: ComponentFixture<AccountFormComponent>;
@@ -42,6 +43,7 @@ describe('Testing AccountForm Component', () => {
             adminCredential: {
               value: mockedAdminCredential,
             },
+            checkPassword: () => of(true),
           },
         },
       ],
@@ -294,7 +296,7 @@ describe('Testing AccountForm Component', () => {
         icon.nativeElement
           .querySelector('mat-icon')
           ?.textContent?.trim()
-      ).toEqual('visibility_off');
+      ).toEqual('visibility');
 
       component.onToggleVisibility();
       cdr.detectChanges();
@@ -307,7 +309,7 @@ describe('Testing AccountForm Component', () => {
           icon.nativeElement
             .querySelector('mat-icon')
             ?.textContent?.trim()
-        ).toEqual('visibility');
+        ).toEqual('visibility_off');
       }, 0);
     });
   });

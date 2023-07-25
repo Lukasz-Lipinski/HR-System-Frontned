@@ -1,0 +1,30 @@
+<form
+  class="form-shape"
+  [formGroup]="getRegistrationForm"
+  (ngSubmit)="onSubmit()"
+>
+  <ng-container *ngFor="let label of getLabels">
+    <mat-form-field>
+      <mat-label>{{
+        setLabel(label.name)
+      }}</mat-label>
+      <input
+        matInput
+        [formControlName]="label.name"
+        [type]="label.type"
+        [placeholder]="label.placeholder"
+      />
+      <mat-error>
+        {{ setError(label.name) }}
+      </mat-error>
+    </mat-form-field>
+  </ng-container>
+  <button
+    mat-button
+    color="primary"
+    type="submit"
+    [disabled]="isValid"
+  >
+    Register
+  </button>
+</form>
