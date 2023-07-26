@@ -3,9 +3,7 @@ import {
   TestBed,
 } from '@angular/core/testing';
 import { LoaderProgressComponent } from './loader-progress.component';
-import { LoaderComponent } from '../loader/loader.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { By } from '@angular/platform-browser';
 
 describe('Testing LoaderProgressComponent', () => {
   let fixture: ComponentFixture<LoaderProgressComponent>;

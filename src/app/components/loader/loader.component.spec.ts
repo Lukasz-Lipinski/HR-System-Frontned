@@ -60,7 +60,6 @@ describe('Testing LoaderComponent', () => {
       spinner = fixture.debugElement.query(
         By.css('mat-spinner')
       ).nativeElement;
-      console.log(spinner);
 
       expect(spinner).toBeDefined();
     });

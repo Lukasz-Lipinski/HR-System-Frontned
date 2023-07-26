@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  EventEmitter,
   inject,
 } from '@angular/core';
 import {
@@ -12,7 +13,10 @@ import {
   Validators,
 } from '@angular/forms';
 import { IAccountFormField } from '../account-form/account-form.component';
-import { AuthService } from 'src/app/services/auth/auth.service';
+import {
+  AuthService,
+  IAdminCredential,
+} from 'src/app/services/auth/auth.service';
 import { Observable } from 'rxjs';
 
 export interface IRegistrationForm {
@@ -32,13 +36,18 @@ export interface IRegistrationForm {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegistartionFormComponent {
+  private registrationFormEmitter =
+    new EventEmitter<IAdminCredential>();
+  get getRegistrationFormEmitter() {
+    return this.registrationFormEmitter;
+  }
   private authService = inject(AuthService);
   private registrationForm!: FormGroup<IRegistrationForm>;
   get getRegistrationForm(): FormGroup<IRegistrationForm> {
     return this.registrationForm;
   }
   get isValid() {
-    return !this.registrationForm.valid;
+    return this.registrationForm.valid;
   }
   private labels: IAccountFormField[] = [
     {
@@ -110,7 +119,7 @@ export class RegistartionFormComponent {
     label.substring(1, label.length);
 
   onSubmit() {
-    console.log(this.getRegistrationForm);
+    this.registrationFormEmitter.emit();
   }
   setError(label: string): string | undefined {
     const errors =
