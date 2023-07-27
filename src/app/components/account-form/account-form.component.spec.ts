@@ -21,6 +21,7 @@ import { SharedModule } from 'src/app/shared/shared/shared.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { By } from '@angular/platform-browser';
 import { of } from 'rxjs';
+import { ValidatorsService } from 'src/app/services/validators/validators.service';
 
 describe('Testing AccountForm Component', () => {
   let fixture: ComponentFixture<AccountFormComponent>;
@@ -36,6 +37,7 @@ describe('Testing AccountForm Component', () => {
         BrowserAnimationsModule,
       ],
       providers: [
+        ValidatorsService,
         ChangeDetectorRef,
         {
           provide: AuthService,

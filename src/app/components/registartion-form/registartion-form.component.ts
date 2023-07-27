@@ -2,7 +2,10 @@ import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
+  Input,
+  Output,
   inject,
+  signal,
 } from '@angular/core';
 import {
   AbstractControl,
@@ -16,8 +19,10 @@ import { IAccountFormField } from '../account-form/account-form.component';
 import {
   AuthService,
   IAdminCredential,
+  IBodyRequestRegister,
 } from 'src/app/services/auth/auth.service';
 import { Observable } from 'rxjs';
+import { ValidatorsService } from 'src/app/services/validators/validators.service';
 
 export interface IRegistrationForm {
   email: FormControl<string>;
@@ -36,12 +41,15 @@ export interface IRegistrationForm {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegistartionFormComponent {
-  private registrationFormEmitter =
-    new EventEmitter<IAdminCredential>();
-  get getRegistrationFormEmitter() {
-    return this.registrationFormEmitter;
-  }
-  private authService = inject(AuthService);
+  private validatorsService = inject(
+    ValidatorsService
+  );
+  @Input({
+    required: true,
+  })
+  isLoading!: boolean;
+  @Output() submitEmitter =
+    new EventEmitter<IBodyRequestRegister>();
   private registrationForm!: FormGroup<IRegistrationForm>;
   get getRegistrationForm(): FormGroup<IRegistrationForm> {
     return this.registrationForm;
@@ -86,7 +94,8 @@ export class RegistartionFormComponent {
           ),
         ],
         asyncValidators: [
-          this.CheckEmailAsyncValidator,
+          this.validatorsService
+            .CheckEmailAsyncValidator,
         ],
         updateOn: 'change',
       }),
@@ -119,7 +128,15 @@ export class RegistartionFormComponent {
     label.substring(1, label.length);
 
   onSubmit() {
-    this.registrationFormEmitter.emit();
+    const { email, name, password, surname } =
+      this.registrationForm.controls;
+    const adminCred: IBodyRequestRegister = {
+      email: email.value,
+      name: name.value,
+      password: password.value,
+      surname: surname.value,
+    };
+    this.submitEmitter.emit(adminCred);
   }
   setError(label: string): string | undefined {
     const errors =
@@ -131,30 +148,12 @@ export class RegistartionFormComponent {
       return undefined;
     }
 
-    const error = Object.keys(errors)[0];
-    return this.findError(error);
-  }
+    const len = label === 'password' ? 6 : 4;
 
-  private findError(error: string) {
-    switch (error) {
-      case 'required':
-        return 'This field is required';
-      case 'pattern':
-        return 'Address email is incorrect';
-      case 'minlength':
-        return 'Passed text is too short';
-      case 'isInRegistered':
-        return 'Assigned email already exsists';
-      default:
-        return '';
-    }
+    const error = Object.keys(errors)[0];
+    return this.validatorsService.findError(
+      error,
+      len
+    );
   }
-  private CheckEmailAsyncValidator: AsyncValidatorFn =
-    (
-      control: AbstractControl
-    ): Observable<ValidationErrors | null> => {
-      return this.authService.CheckEmail(
-        control.value
-      );
-    };
 }

@@ -31,6 +31,7 @@ import {
   MatFormField,
   MatLabel,
 } from '@angular/material/form-field';
+import { ValidatorsService } from 'src/app/services/validators/validators.service';
 
 describe('Testing Registration Form Component', () => {
   let fixture: ComponentFixture<RegistartionFormComponent>;
@@ -63,12 +64,13 @@ describe('Testing Registration Form Component', () => {
         HttpClientTestingModule,
       ],
       providers: [
+        ValidatorsService,
+        AuthService,
+        ChangeDetectorRef,
         {
           provide: 'LocalEnv',
           useValue: mockedEnvironment,
         },
-        AuthService,
-        ChangeDetectorRef,
       ],
     }).compileComponents();
 
@@ -141,7 +143,7 @@ describe('Testing Registration Form Component', () => {
     });
     it('Should submitted data', () => {
       const spyOnEmitter = spyOn(
-        component.getRegistrationFormEmitter,
+        component.submitEmitter,
         'emit'
       );
       setFormValid(component.getRegistrationForm);

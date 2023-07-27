@@ -1,6 +1,11 @@
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
+  EventEmitter,
+  Output,
+  inject,
+  signal,
 } from '@angular/core';
 import {
   AbstractControl,
@@ -10,11 +15,13 @@ import {
   ValidationErrors,
   Validators,
 } from '@angular/forms';
+import { IAccountFormField } from '../account-form/account-form.component';
+import { ValidatorsService } from 'src/app/services/validators/validators.service';
 
 interface IPasswordForm {
   newPassword: FormControl<string>;
-  confirmPasswordNewPassword: FormControl<string>;
-  confirmPassword: FormControl<string>;
+  confirmNewPassword: FormControl<string>;
+  oldPassword: FormControl<string>;
 }
 
 // function AsyncPasswordValidator(): AsyncValidatorFn {
@@ -41,12 +48,52 @@ interface IPasswordForm {
   selector: 'app-password-form',
   templateUrl: './password-form.component.html',
   styleUrls: ['./password-form.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  // changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PasswordFormComponent {
+  @Output() passwordEmitter =
+    new EventEmitter<string>();
+  private cdr: ChangeDetectorRef = inject(
+    ChangeDetectorRef
+  );
   private passwordForm!: FormGroup<IPasswordForm>;
+  private validatorsService: ValidatorsService =
+    inject(ValidatorsService);
   get getPasswordForm(): typeof this.passwordForm {
     return this.passwordForm;
+  }
+  private isVisibile = signal<boolean>(false);
+  get getIsVisible(): boolean {
+    return this.isVisibile();
+  }
+  set setIsVisibile(value: boolean) {
+    this.isVisibile.update(
+      (currValue) => !currValue
+    );
+  }
+
+  private fields: IAccountFormField[] = [
+    {
+      name: 'newPassword',
+      placeholder: 'Enter your new password',
+      type: 'password',
+    },
+    {
+      name: 'confirmNewPassword',
+      placeholder:
+        'Enter your new password once again',
+      type: 'password',
+      icon: 'visibility',
+    },
+    {
+      name: 'oldPassword',
+      placeholder:
+        'Enter previous password to confirm your changes',
+      type: 'password',
+    },
+  ];
+  get getFields(): IAccountFormField[] {
+    return this.fields;
   }
 
   ngOnInit(): void {
@@ -60,7 +107,7 @@ export class PasswordFormComponent {
           updateOn: 'change',
           nonNullable: true,
         }),
-        confirmPasswordNewPassword:
+        confirmNewPassword:
           new FormControl<string>('', {
             validators: [
               Validators.required,
@@ -69,14 +116,48 @@ export class PasswordFormComponent {
             updateOn: 'change',
             nonNullable: true,
           }),
-        confirmPassword: new FormControl<string>(
-          '',
-          {
-            asyncValidators: [],
-            nonNullable: true,
-            updateOn: 'blur',
-          }
-        ),
+        oldPassword: new FormControl<string>('', {
+          asyncValidators: [],
+          nonNullable: true,
+          updateOn: 'blur',
+        }),
       });
+  }
+
+  setError(label: string) {
+    const control =
+      this.passwordForm.controls[
+        label as keyof IPasswordForm
+      ];
+
+    if (!control.errors) {
+      return;
+    }
+    const error = Object.keys(control.errors)[0];
+    return this.validatorsService.findError(
+      error,
+      6
+    );
+  }
+
+  setLabel(label: string) {
+    switch (label) {
+      case 'newPassword':
+        return 'New Password';
+      case 'confirmNewPassword':
+        return 'Confirm New Password';
+      case 'oldPassword':
+        return 'Old Password';
+      default:
+        return '';
+    }
+  }
+
+  onSubmit() {
+    this.passwordForm.valid &&
+      this.passwordEmitter.emit(
+        this.passwordForm.controls['newPassword']
+          .value
+      );
   }
 }

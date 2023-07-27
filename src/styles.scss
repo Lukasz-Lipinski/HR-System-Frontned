@@ -24,14 +24,24 @@ body {
   }
 }
 
-.form-shape {
-  display: flex;
-  flex-direction: column;
-  min-width: 400px;
+.form {
+  &-shape {
+    display: flex;
+    flex-direction: column;
+    min-width: 400px;
 
-  @media only screen and (width < 400px) {
-    button {
-      min-height: 80px;
+    @media only screen and (width < 400px) {
+      button {
+        min-height: 80px;
+      }
+    }
+  }
+
+  &-submit-button {
+    margin-top: 1rem;
+
+    @media only screen and (height < 400px) {
+      margin-top: 25%;
     }
   }
 }

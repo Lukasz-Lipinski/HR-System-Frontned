@@ -8,5 +8,8 @@
   </button>
   <h1>Create your account</h1>
 
-  <app-registartion-form />
+  <app-registartion-form
+    [isLoading]="getIsLoadingState"
+    (submitEmitter)="onRegister($event)"
+  />
 </section>

@@ -25,6 +25,7 @@ export class AccountPageComponent {
     inject(MatSnackBar);
 
   constructor() {}
+
   onSubmit(adminCredentials: IAdminCredential) {
     this.authService
       .ChangeAdminCredential(adminCredentials)
@@ -38,5 +39,8 @@ export class AccountPageComponent {
           });
         },
       });
+  }
+  onSetNewPassword(newPassword: string) {
+    this.authService.ChangePassword(newPassword);
   }
 }

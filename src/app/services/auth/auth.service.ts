@@ -75,6 +75,10 @@ export class AuthService implements OnInit {
       )
       .pipe(
         tap((res) => {
+          console.log(
+            '🚀 ~ file: auth.service.ts:78 ~ AuthService ~ tap ~ res:',
+            res
+          );
           if (res.data) {
             this.adminCredential.next(res.data);
             sessionStorage.setItem(
@@ -89,14 +93,27 @@ export class AuthService implements OnInit {
   Register(
     userCred: IBodyRequestRegister
   ): Observable<
-    IBackendReponse<IAdminCredential>
+    IBackendReponse<IAdminCredential | string>
   > {
-    return this.http.post<
-      IBackendReponse<IAdminCredential>
-    >(
-      `${this.env.apiUrl}/api/admin/register`,
-      userCred
-    );
+    return this.http
+      .post<
+        IBackendReponse<IAdminCredential | string>
+      >(
+        `${this.env.apiUrl}/api/admin/register`,
+        userCred
+      )
+      .pipe(
+        catchError((err) => {
+          const res: IBackendReponse<string> = {
+            data: err.message,
+            error: true,
+            code: err.code,
+            message: err.message,
+          };
+
+          return of(res);
+        })
+      );
   }
 
   GetAdminCred(): Observable<

@@ -20,6 +20,7 @@
     </mat-form-field>
   </ng-container>
   <button
+    *ngIf="!isLoading; else Spinner"
     mat-button
     color="primary"
     type="submit"
@@ -28,3 +29,11 @@
     Register
   </button>
 </form>
+
+<ng-template #Spinner>
+  <mat-spinner
+    color="warn"
+    diameter="small"
+  >
+  </mat-spinner>
+</ng-template>

@@ -21,6 +21,7 @@ import {
   AuthService,
   IAdminCredential,
 } from 'src/app/services/auth/auth.service';
+import { ValidatorsService } from 'src/app/services/validators/validators.service';
 
 export interface IAccountForm {
   email: FormControl<string>;
@@ -61,6 +62,9 @@ function identicalPasswordsValidator(
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccountFormComponent {
+  private validatorsService = inject(
+    ValidatorsService
+  );
   @Output() formEmitter =
     new EventEmitter<IAdminCredential>();
   private adminData!: IAdminCredential;
@@ -189,28 +193,12 @@ export class AccountFormComponent {
 
     const error = Object.keys(errors)[0];
 
-    return this.findError(error, length);
+    return this.validatorsService.findError(
+      error,
+      length
+    );
   }
 
-  private findError(
-    error: string,
-    length: number
-  ) {
-    switch (error) {
-      case 'required':
-        return 'This field is required';
-      case 'minlength':
-        return `Minimum length must be ${length}`;
-      case 'email':
-        return 'Invalid email address';
-      case 'notIdentical':
-        return 'Passwords do not match';
-      case 'invalidPassword':
-        return 'Invalid password';
-      default:
-        return;
-    }
-  }
   onSubmit() {
     if (this.isFormValid()) {
       const { email, name, surname } =
