@@ -90,7 +90,7 @@ export class RegistartionFormComponent {
         validators: [
           Validators.required,
           Validators.pattern(
-            /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(?:pl|com|org|org\.pl|org\.com|com\.pl)$/i
+            this.validatorsService.getPattern
           ),
         ],
         asyncValidators: [

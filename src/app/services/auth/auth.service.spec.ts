@@ -139,7 +139,7 @@ describe('Testing AuthService', () => {
   }));
   it('Should checked password async and returned true if is correct', fakeAsync(() => {
     service
-      .checkPassword('test hashed password')
+      .CheckPassword('test hashed password')
       .subscribe({
         next: (res) => {
           expect(res).toBeTrue();
@@ -154,7 +154,7 @@ describe('Testing AuthService', () => {
   }));
   it("Should checked password async and returned false if isn't correct", fakeAsync(() => {
     service
-      .checkPassword('incorrect password')
+      .CheckPassword('incorrect password')
       .subscribe({
         next: (err) => {
           expect(err).toBeFalse();

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {
   ActivatedRoute,
+  Params,
   Router,
 } from '@angular/router';
 import { SharedModule } from 'src/app/shared/shared/shared.module';
@@ -22,7 +23,7 @@ export class CreateUpdateUserPageComponent {
 
   ngOnInit() {
     this.activatedRoute.params.subscribe({
-      next: (params) => {
+      next: (params: Params) => {
         console.log(params);
       },
     });

@@ -45,7 +45,7 @@ describe('Testing AccountForm Component', () => {
             adminCredential: {
               value: mockedAdminCredential,
             },
-            checkPassword: () => of(true),
+            CheckPassword: () => of(true),
           },
         },
       ],

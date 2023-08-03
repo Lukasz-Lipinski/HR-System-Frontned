@@ -3,16 +3,15 @@ import {
   ChangeDetectorRef,
   Component,
   EventEmitter,
+  Input,
   Output,
+  computed,
   inject,
   signal,
 } from '@angular/core';
 import {
-  AbstractControl,
-  AsyncValidatorFn,
   FormControl,
   FormGroup,
-  ValidationErrors,
   Validators,
 } from '@angular/forms';
 import { IAccountFormField } from '../account-form/account-form.component';
@@ -24,38 +23,19 @@ interface IPasswordForm {
   oldPassword: FormControl<string>;
 }
 
-// function AsyncPasswordValidator(): AsyncValidatorFn {
-//   return (
-//     control: AbstractControl
-//   ): Promise<ValidationErrors | null> => {
-//     return new Promise((resolve, reject) => {
-//       setTimeout(() => {
-//         if (
-//           control.value ===
-//           control.root.get('confirmPassword')
-//             .value
-//         ) {
-//           resolve(null);
-//         } else {
-//           resolve({ confirmPassword: true });
-//         }
-//       }, 1000);
-//     });
-//   };
-// }
-
 @Component({
   selector: 'app-password-form',
   templateUrl: './password-form.component.html',
   styleUrls: ['./password-form.component.scss'],
-  // changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PasswordFormComponent {
+  @Input({
+    required: true,
+  })
+  isLoading = signal<boolean>(false);
   @Output() passwordEmitter =
     new EventEmitter<string>();
-  private cdr: ChangeDetectorRef = inject(
-    ChangeDetectorRef
-  );
   private passwordForm!: FormGroup<IPasswordForm>;
   private validatorsService: ValidatorsService =
     inject(ValidatorsService);
@@ -95,6 +75,12 @@ export class PasswordFormComponent {
   get getFields(): IAccountFormField[] {
     return this.fields;
   }
+  get isPasswordMatched() {
+    return this.passwordForm.controls[
+      'oldPassword'
+    ].valid;
+  }
+  buttonDisabled = () => !this.passwordForm.valid;
 
   ngOnInit(): void {
     this.passwordForm =
@@ -104,7 +90,6 @@ export class PasswordFormComponent {
             Validators.required,
             Validators.minLength(6),
           ],
-          updateOn: 'change',
           nonNullable: true,
         }),
         confirmNewPassword:
@@ -113,15 +98,29 @@ export class PasswordFormComponent {
               Validators.required,
               Validators.minLength(6),
             ],
-            updateOn: 'change',
             nonNullable: true,
           }),
         oldPassword: new FormControl<string>('', {
-          asyncValidators: [],
           nonNullable: true,
-          updateOn: 'blur',
+          updateOn: 'change',
         }),
       });
+
+    this.getPasswordForm.controls[
+      'confirmNewPassword'
+    ].addValidators(
+      this.validatorsService.MatchPasswordValidator(
+        this.getPasswordForm.controls[
+          'newPassword'
+        ]
+      )
+    );
+    this.getPasswordForm.controls[
+      'oldPassword'
+    ].addAsyncValidators(
+      this.validatorsService
+        .CheckPasswordAsyncValidator
+    );
   }
 
   setError(label: string) {

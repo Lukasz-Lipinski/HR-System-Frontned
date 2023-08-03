@@ -218,7 +218,7 @@ export class AccountFormComponent {
       control: AbstractControl
     ): Observable<ValidationErrors | null> => {
       return this.authService
-        .checkPassword(control.value)
+        .CheckPassword(control.value)
         .pipe(
           map((res) =>
             res ? null : { invalidPassword: true }

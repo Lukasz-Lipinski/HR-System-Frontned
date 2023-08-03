@@ -6,8 +6,14 @@ import {
   AsyncValidatorFn,
   AbstractControl,
   ValidationErrors,
+  ValidatorFn,
 } from '@angular/forms';
-import { Observable } from 'rxjs';
+import {
+  Observable,
+  of,
+  switchMap,
+  timeout,
+} from 'rxjs';
 import { AuthService } from '../auth/auth.service';
 
 @Injectable({
@@ -16,6 +22,11 @@ import { AuthService } from '../auth/auth.service';
 export class ValidatorsService {
   private authService: AuthService =
     inject(AuthService);
+  private pattern =
+    /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(?:pl|com|org|org\.pl|org\.com|com\.pl)$/i;
+  get getPattern() {
+    return this.pattern;
+  }
 
   findError(error: string, length: number) {
     switch (error) {
@@ -33,6 +44,10 @@ export class ValidatorsService {
         return 'Invalid password';
       case 'isInRegistered':
         return 'Assigned email already exsists';
+      case 'NotMatchPassword':
+        return 'Passwords do not match';
+      case 'MatchPassword':
+        return 'Password matched';
       default:
         return;
     }
@@ -45,4 +60,47 @@ export class ValidatorsService {
       control.value
     );
   };
+
+  CheckEmployeeEmailAsyncValidator: AsyncValidatorFn =
+    (
+      control: AbstractControl
+    ): Observable<ValidationErrors | null> => {
+      return this.authService.CheckEmployeeEmail(
+        control.value
+      );
+    };
+
+  MatchPasswordValidator =
+    (
+      newPasswordControl: AbstractControl
+    ): ValidatorFn =>
+    (
+      control: AbstractControl
+    ): ValidationErrors | null => {
+      if (
+        newPasswordControl.value === control.value
+      ) {
+        return null;
+      }
+      return {
+        NotMatchPassword: true,
+      };
+    };
+
+  CheckPasswordAsyncValidator: AsyncValidatorFn =
+    (
+      control: AbstractControl
+    ): Observable<ValidationErrors | null> => {
+      return this.authService
+        .CheckPassword(control.value)
+        .pipe(
+          switchMap((res) => {
+            return res
+              ? of(null)
+              : of({
+                  NotMatchPassword: true,
+                });
+          })
+        );
+    };
 }

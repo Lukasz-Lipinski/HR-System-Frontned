@@ -26,6 +26,7 @@ import { SearchComponent } from 'src/app/components/search/search.component';
 import { AccountFormComponent } from 'src/app/components/account-form/account-form.component';
 import { PasswordFormComponent } from 'src/app/components/password-form/password-form.component';
 import { RegistartionFormComponent } from 'src/app/components/registartion-form/registartion-form.component';
+import { UserCredentialFormComponent } from 'src/app/components/user-credential-form/user-credential-form.component';
 
 const components: any[] = [
   NavigationComponent,
@@ -37,6 +38,7 @@ const components: any[] = [
   AccountFormComponent,
   PasswordFormComponent,
   RegistartionFormComponent,
+  UserCredentialFormComponent,
 ];
 
 const modules = [

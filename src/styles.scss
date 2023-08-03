@@ -10,6 +10,16 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
+.box {
+  display: flex;
+  width: 100%;
+
+  &-center {
+    align-items: center;
+    justify-content: center;
+  }
+}
+
 .container {
   display: flex;
   flex-wrap: wrap;
@@ -25,6 +35,10 @@ body {
 }
 
 .form {
+  &-gap {
+    gap: 12px;
+  }
+
   &-shape {
     display: flex;
     flex-direction: column;

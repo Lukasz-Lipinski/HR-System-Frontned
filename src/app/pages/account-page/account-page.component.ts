@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
+  signal,
 } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {
@@ -23,6 +24,10 @@ export class AccountPageComponent {
     inject(AuthService);
   private snackbar: MatSnackBar =
     inject(MatSnackBar);
+  private isLoadingState = signal<boolean>(false);
+  get getIsLoading() {
+    return this.isLoadingState;
+  }
 
   constructor() {}
 
@@ -41,6 +46,19 @@ export class AccountPageComponent {
       });
   }
   onSetNewPassword(newPassword: string) {
-    this.authService.ChangePassword(newPassword);
+    this.isLoadingState.set(true);
+    this.authService
+      .ChangePassword(newPassword)
+      .subscribe({
+        next: (res) => {
+          this.isLoadingState.set(false);
+          this.snackbar.open(res.data, 'Close', {
+            duration: 3000,
+            panelClass: res.error
+              ? ['error-snackbar']
+              : '',
+          });
+        },
+      });
   }
 }

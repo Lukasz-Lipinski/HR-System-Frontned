@@ -13,6 +13,7 @@ import {
   of,
   switchMap,
   tap,
+  timeout,
 } from 'rxjs';
 import { environment } from '../../env/environment';
 import { ValidationErrors } from '@angular/forms';
@@ -138,7 +139,7 @@ export class AuthService implements OnInit {
       );
   }
 
-  checkPassword(
+  CheckPassword(
     password: string
   ): Observable<boolean> {
     const url = `${this.env.apiUrl}/api/admin/check-password`;
@@ -159,6 +160,7 @@ export class AuthService implements OnInit {
         }
       )
       .pipe(
+        timeout(2000),
         catchError((err) => {
           const res: IBackendReponse<boolean> = {
             code: err.status,
@@ -203,16 +205,17 @@ export class AuthService implements OnInit {
 
   ChangePassword(
     password: string
-  ): Observable<string> {
+  ): Observable<IBackendReponse<string>> {
     const url =
       this.env.apiUrl +
-      '/api/admin/change-password';
+      '/api/admin/update-password';
     return this.http
       .put<IBackendReponse<string>>(
         url,
-        password,
+        { Password: password },
         {
           headers: {
+            'Content-Type': 'application/json',
             Authorization:
               'Bearer ' +
               sessionStorage.getItem('token'),
@@ -224,8 +227,43 @@ export class AuthService implements OnInit {
           of({
             data: err.message,
           } as IBackendReponse<string>)
-        ),
-        map((res) => res.data)
+        )
+      );
+  }
+
+  CheckEmployeeEmail(
+    employeeEmail: string
+  ): Observable<ValidationErrors | null> {
+    return this.http
+      .post<IBackendReponse<boolean>>(
+        this.env.apiUrl +
+          '/api/employees/check-email',
+        {
+          Email: employeeEmail,
+        },
+        {
+          headers: {
+            Authorization:
+              'Bearer ' +
+              sessionStorage.getItem('token'),
+          },
+        }
+      )
+      .pipe(
+        catchError((err) => {
+          const res: IBackendReponse<boolean> = {
+            code: 0,
+            data: true,
+            error: true,
+            message: '',
+          };
+          return of(res);
+        }),
+        map((res) =>
+          res.error
+            ? { isInRegistered: true }
+            : null
+        )
       );
   }
 
