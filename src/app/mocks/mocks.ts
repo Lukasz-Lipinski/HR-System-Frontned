@@ -9,6 +9,7 @@ import {
   IEmployee,
   ISuperior,
 } from '../services/employees/employees.service';
+import { Role } from '../components/user-credential-form/user-credential-form.component';
 
 export const mockedEmail = 'test@example.com';
 export const mockedPassword = 'testpassword';
@@ -75,7 +76,27 @@ export const mockedSuperior: ISuperior = {
   email: 'johndoe@example.com',
   area: 'Sales',
   position: 'Manager',
+  id: 'john-id',
 };
+
+export const mockedSuperiors: ISuperior[] = [
+  {
+    id: 'j-id',
+    name: 'John',
+    surname: 'Doe',
+    email: 'XXXXXXXXXXXXXXXXXXX',
+    area: 'Sales',
+    position: 'Manager',
+  },
+  {
+    id: 'd-id',
+    name: 'Doe',
+    surname: 'John',
+    email: 'yyyyyyyyyyyyyyy',
+    area: 'IT',
+    position: 'Leader',
+  },
+];
 
 export const mockedEmployees: IEmployee[] = [
   {
@@ -83,7 +104,7 @@ export const mockedEmployees: IEmployee[] = [
     name: 'John',
     surname: 'Doe',
     email: 'john.doe@example.com',
-    role: 1,
+    role: Role.Manager,
     position: 'Manager',
     daysoff: 10,
     status: 1,

@@ -12,13 +12,14 @@ import {
 } from 'rxjs';
 import { IBackendReponse } from 'src/app/services/auth/auth.service';
 import { environment } from 'src/app/env/environment';
+import { Role } from 'src/app/components/user-credential-form/user-credential-form.component';
 
 export interface IEmployee {
   id: string;
   name: string;
   surname: string;
   email: string;
-  role: number;
+  role: Role;
   position: string;
   daysoff: number;
   status: number;
@@ -26,6 +27,7 @@ export interface IEmployee {
 }
 
 export interface ISuperior {
+  id: string;
   name: string;
   surname: string;
   email: string;

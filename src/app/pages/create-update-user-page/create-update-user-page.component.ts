@@ -1,9 +1,6 @@
-import { Component } from '@angular/core';
-import {
-  ActivatedRoute,
-  Params,
-  Router,
-} from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { ActivatedRoute } from '@angular/router';
 import { SharedModule } from 'src/app/shared/shared/shared.module';
 
 @Component({
@@ -17,15 +14,14 @@ import { SharedModule } from 'src/app/shared/shared/shared.module';
   imports: [SharedModule],
 })
 export class CreateUpdateUserPageComponent {
-  constructor(
-    private activatedRoute: ActivatedRoute
-  ) {}
-
-  ngOnInit() {
-    this.activatedRoute.params.subscribe({
-      next: (params: Params) => {
-        console.log(params);
-      },
-    });
+  private activatedRoute = inject(ActivatedRoute);
+  private title = toSignal(
+    this.activatedRoute.title
+  );
+  get getTitle() {
+    return this.title();
   }
+  constructor() {}
+
+  ngOnInit() {}
 }

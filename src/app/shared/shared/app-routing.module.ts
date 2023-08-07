@@ -5,6 +5,7 @@ import {
 } from '@angular/router';
 import { AppComponent } from 'src/app/app.component';
 import { accountPageResolver } from 'src/app/pages/account-page/account-page.resolver';
+import { SuperiorResolver } from 'src/app/pages/create-update-user-page/superior.resolver';
 import { dashboardMainPageResolver } from 'src/app/pages/dashboard-page/main/dashboard-main-page.resolver';
 import {
   CheckIfLoggedGuard,
@@ -18,6 +19,7 @@ const routes: Routes = [
     path: '',
     component: AppComponent,
     canActivate: [CheckIfLoggedGuard],
+    title: 'HR-System App',
   },
   {
     path: 'sign-in',
@@ -26,6 +28,7 @@ const routes: Routes = [
         '../../pages/sign-in-page/sign-in-page.component'
       ).then((m) => m.SignInPageComponent),
     canActivate: [SignInPageGuard],
+    title: 'Sign in',
   },
   {
     path: 'registration',
@@ -33,6 +36,7 @@ const routes: Routes = [
       import(
         '../../pages/registration-page/registration-page.component'
       ).then((m) => m.RegistrationPageComponent),
+    title: 'Registration',
   },
   {
     path: 'dashboard',
@@ -40,6 +44,7 @@ const routes: Routes = [
       import(
         '../../pages/dashboard-page/dashboard-page.component'
       ).then((m) => m.DashboardPageComponent),
+    title: 'Dashboard',
     // canActivate: [CheckAuthGuard],
     // canActivateChild: [CheckIfSubpageCanActivate],
     children: [
@@ -72,6 +77,10 @@ const routes: Routes = [
           ).then(
             (m) => m.CreateUpdateUserPageComponent
           ),
+        title: 'Create user',
+        resolve: {
+          superiors: SuperiorResolver,
+        },
       },
       {
         path: 'update-user',
@@ -81,6 +90,10 @@ const routes: Routes = [
           ).then(
             (m) => m.CreateUpdateUserPageComponent
           ),
+        title: 'Update user',
+        resolve: {
+          superiors: SuperiorResolver,
+        },
       },
       {
         path: '**',

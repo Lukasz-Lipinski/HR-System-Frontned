@@ -205,7 +205,7 @@ describe('Testing Registration Form Component', () => {
       expect(errorMessage).toBeTruthy();
       expect(
         errorMessage.textContent?.trim()
-      ).toEqual('Passed text is too short');
+      ).toEqual('Minimum length must be 4');
     }));
   });
 });

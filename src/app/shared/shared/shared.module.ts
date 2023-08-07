@@ -16,6 +16,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatSelectModule } from '@angular/material/select';
 
 import { NavigationComponent } from 'src/app/components/navigation/navigation.component';
 import { LoaderComponent } from 'src/app/components/loader/loader.component';
@@ -58,6 +59,7 @@ const modules = [
   MatTableModule,
   MatGridListModule,
   MatTooltipModule,
+  MatSelectModule,
 ];
 
 @NgModule({
