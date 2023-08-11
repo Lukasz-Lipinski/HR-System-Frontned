@@ -1,6 +1,4 @@
-<div>
-  <app-search />
-  <app-employees-list
-    [employees]="getEmployeesSignal()"
-  ></app-employees-list>
+<div class="container container-vertical container-horizontal-center">
+  <app-search class="search-width" (onSearchEmitter)="onSearch($event)" />
+  <app-employees-list [employees]="getEmployeesSignal()"></app-employees-list>
 </div>

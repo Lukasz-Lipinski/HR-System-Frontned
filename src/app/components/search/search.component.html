@@ -1,17 +1,5 @@
-<mat-form-field
-  [formGroup]="searchForm"
-  class="full-width"
->
+<mat-form-field [formGroup]="searchForm">
   <mat-label>Find Employee</mat-label>
-  <input
-    matInput
-    type="search"
-    placeholder="Employee Name"
-    formControlName="searchField"
-  />
-  <mat-icon
-    matSuffix
-    (click)="onSearch()"
-    >search</mat-icon
-  >
+  <input matInput type="search" placeholder="Employee Name" formControlName="searchField" />
+  <mat-icon matSuffix (click)="onSearch()">search</mat-icon>
 </mat-form-field>

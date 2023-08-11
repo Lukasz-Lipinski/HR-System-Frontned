@@ -1,14 +1,20 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  Signal,
   WritableSignal,
+  inject,
   signal,
 } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import {
   ActivatedRoute,
   Data,
 } from '@angular/router';
-import { IEmployee } from 'src/app/services/employees/employees.service';
+import { tap, map } from 'rxjs';
+import { IBackendReponse } from 'src/app/services/auth/auth.service';
+import { EmployeesService, IEmployee } from 'src/app/services/employees/employees.service';
 import { SharedModule } from 'src/app/shared/shared/shared.module';
 
 @Component({
@@ -20,20 +26,44 @@ import { SharedModule } from 'src/app/shared/shared/shared.module';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MainComponent {
-  private employees: WritableSignal<IEmployee[]> =
-    signal<IEmployee[]>([]);
-  get getEmployeesSignal() {
-    return this.employees.asReadonly();
+  private activatedRoute: ActivatedRoute = inject(ActivatedRoute);
+  private employeesService: EmployeesService = inject(EmployeesService);
+
+  private isLoadingState = signal<boolean>(false);
+  get isLoadingStateSignal() {
+    return this.isLoadingState.asReadonly();
   }
-  constructor(
-    private activatedRoute: ActivatedRoute
-  ) {}
+  private employees: Signal<IEmployee[]> = toSignal(this.activatedRoute.data.pipe(
+    map(
+      (data: Data) => data['employees'])
+  ), {
+    requireSync: true
+  })
+  get getEmployeesSignal() {
+    return this.employees;
+  }
+  private snackbar: MatSnackBar = inject(MatSnackBar);
 
   ngOnInit() {
-    this.activatedRoute.data.subscribe({
-      next: (data: Data) => {
-        this.employees.set(data['employees']);
-      },
+  }
+
+  onSearch(parameter: string) {
+    this.isLoadingState.set(true);
+    this.employees = toSignal(this.employeesService.findEmployees(parameter).pipe(
+      tap(
+        (res: IBackendReponse<IEmployee[]>) => {
+          res.error && this.snackbar.open(res.message, "Close", {
+            duration: 2000,
+            panelClass: ['snackbar-error']
+          });
+        }
+      ),
+      map((res) => {
+        this.isLoadingState.set(false);
+        return res.data;
+      })
+    ), {
+      requireSync: true
     });
   }
 }

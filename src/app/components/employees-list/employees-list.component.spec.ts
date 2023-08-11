@@ -13,6 +13,8 @@ import {
   Router,
 } from '@angular/router';
 import { By } from '@angular/platform-browser';
+import { MatPaginator } from '@angular/material/paginator';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('Testing EmployeesList Component', () => {
   let fixture: ComponentFixture<EmployeesListComponent>;
@@ -25,6 +27,7 @@ describe('Testing EmployeesList Component', () => {
       imports: [
         RouterTestingModule,
         SharedModule,
+        BrowserAnimationsModule
       ],
     }).compileComponents();
 
@@ -135,5 +138,9 @@ describe('Testing EmployeesList Component', () => {
       ).toEqual('not employees are found');
       expect(tab).toBeFalsy();
     });
+    it("Should dispalyed paginator", () => {
+      const paginator = fixture.debugElement.query(By.directive(MatPaginator)).nativeElement;
+      expect(paginator).toBeTruthy();
+    })
   });
 });

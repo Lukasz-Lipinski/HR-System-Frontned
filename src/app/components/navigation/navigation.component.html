@@ -1,44 +1,21 @@
-<mat-sidenav-container
-  style="z-index: 1000"
-  hasBackdrop="true"
-  class="drawer"
->
-  <mat-sidenav
-    #drawer
-    mode="over"
-    class="drawer-menu"
-  >
-    <a
-      *ngFor="let link of getLinks"
-      mat-button
-      [color]="setColor(link.label)"
-      [routerLink]="link.href"
-      [routerLinkActive]="setActive(link.label)"
-      [routerLinkActiveOptions]="{
+<mat-sidenav-container style="z-index: 1000" hasBackdrop="true" class="drawer">
+  <mat-sidenav #drawer mode="over" class="drawer-menu">
+    <a *ngFor="let link of getLinks" mat-button [color]="setColor(link.label)" [routerLink]="link.href"
+      [routerLinkActive]="setActive(link.label)" [routerLinkActiveOptions]="{
         exact: true
-      }"
-    >
+      }">
       {{ link.label }}
-      <mat-icon
-        [fontIcon]="link.icon"
-        [color]="setColor(link.label)"
-      ></mat-icon>
+      <mat-icon [fontIcon]="link.icon" [color]="setColor(link.label)"></mat-icon>
     </a>
-    <a
-      mat-button
-      color="warn"
-    >
+    <a mat-button color="warn">
       Logout
       <mat-icon fontIcon="logout"></mat-icon>
     </a>
   </mat-sidenav>
   <mat-sidenav-content>
-    <div
-      class="field"
-      (mouseenter)="drawer.toggle()"
-    ></div>
-    <div class="container">
+    <div class="field" (mouseenter)="drawer.toggle()"></div>
+    <section>
       <ng-content></ng-content>
-    </div>
+    </section>
   </mat-sidenav-content>
 </mat-sidenav-container>

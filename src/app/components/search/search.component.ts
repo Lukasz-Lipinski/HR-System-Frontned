@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
+  Output,
 } from '@angular/core';
 import {
   FormControl,
@@ -21,7 +22,7 @@ interface ISearchForm {
 })
 export class SearchComponent {
   searchForm!: FormGroup<ISearchForm>;
-  private searchEmitter =
+  @Output() onSearchEmitter =
     new EventEmitter<string>();
   ngOnInit() {
     this.searchForm = new FormGroup<ISearchForm>({
@@ -34,6 +35,6 @@ export class SearchComponent {
   onSearch() {
     const { value } =
       this.searchForm.controls['searchField'];
-    value && this.searchEmitter.emit(value);
+    value && this.onSearchEmitter.emit(value);
   }
 }

@@ -17,6 +17,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSelectModule } from '@angular/material/select';
+import { MatPaginatorModule } from "@angular/material/paginator";
 
 import { NavigationComponent } from 'src/app/components/navigation/navigation.component';
 import { LoaderComponent } from 'src/app/components/loader/loader.component';
@@ -60,6 +61,7 @@ const modules = [
   MatGridListModule,
   MatTooltipModule,
   MatSelectModule,
+  MatPaginatorModule,
 ];
 
 @NgModule({
@@ -67,4 +69,4 @@ const modules = [
   imports: [...modules],
   exports: [...modules, ...components],
 })
-export class SharedModule {}
+export class SharedModule { }

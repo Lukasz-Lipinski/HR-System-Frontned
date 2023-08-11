@@ -1,21 +1,21 @@
 // import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-// import { AccountPageComponent } from './account-page.component';
+// describe('Testing ', () => {
+// let component: ;
+// let fixture: ComponentFixture<>;
 
-// describe('AccountPageComponent', () => {
-//   let component: AccountPageComponent;
-//   let fixture: ComponentFixture<AccountPageComponent>;
+// beforeEach(() => {
+// TestBed.configureTestingModule({
 
-//   beforeEach(() => {
-//     TestBed.configureTestingModule({
-//       declarations: [AccountPageComponent]
-//     });
-//     fixture = TestBed.createComponent(AccountPageComponent);
-//     component = fixture.componentInstance;
-//     fixture.detectChanges();
-//   });
+// }).compileComponents();
+// fixture = TestBed.createComponent();
+// component = fixture.componentInstance;
+// })
 
-//   it('should create', () => {
-//     expect(component).toBeTruthy();
-//   });
+// describe('DOM tests', () => {
+// it('should create', () => {
+// expect(component).toBeTruthy();
+// });
+// })
+// describe('Class tests', () => {})
 // });

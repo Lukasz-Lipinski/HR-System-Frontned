@@ -41,6 +41,10 @@ body {
   }
 }
 
+.full-width {
+  width: 100%;
+}
+
 .container {
   display: flex;
   flex-wrap: wrap;
@@ -60,6 +64,7 @@ body {
   &-vertical {
     flex-wrap: nowrap;
     flex-direction: column;
+    justify-content: start;
 
     &-center {
       justify-content: center;

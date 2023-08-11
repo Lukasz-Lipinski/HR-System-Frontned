@@ -43,7 +43,7 @@ export class EmployeesService {
     private http: HttpClient,
     @Inject('LocalEnv')
     private env: typeof environment
-  ) {}
+  ) { }
 
   getEmployees(): Observable<IEmployee[]> {
     return this.http
@@ -136,5 +136,28 @@ export class EmployeesService {
           return of(err);
         })
       );
+  }
+  findEmployees(phrase: string): Observable<IBackendReponse<IEmployee[]>> {
+    const url =
+      this.env.apiUrl +
+      '/api/employee/find-by/' +
+      phrase;
+    return this.http.get<IBackendReponse<IEmployee[]>>(url, {
+      headers: {
+        Authorization:
+          'Bearer ' +
+          sessionStorage.getItem('token'),
+      },
+    }).pipe(
+      catchError((err) => {
+        const res: IBackendReponse<IEmployee[]> = {
+          data: [],
+          code: 0,
+          error: true,
+          message: err.message
+        };
+        return of(res);
+      })
+    );
   }
 }
