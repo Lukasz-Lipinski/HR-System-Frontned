@@ -2,19 +2,19 @@ import {
   ChangeDetectionStrategy,
   Component,
   Signal,
-  WritableSignal,
+  computed,
   inject,
   signal,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import {
-  ActivatedRoute,
-  Data,
-} from '@angular/router';
+import { ActivatedRoute, Data } from '@angular/router';
 import { tap, map } from 'rxjs';
 import { IBackendReponse } from 'src/app/services/auth/auth.service';
-import { EmployeesService, IEmployee } from 'src/app/services/employees/employees.service';
+import {
+  EmployeesService,
+  IEmployee,
+} from 'src/app/services/employees/employees.service';
 import { SharedModule } from 'src/app/shared/shared/shared.module';
 
 @Component({
@@ -27,43 +27,25 @@ import { SharedModule } from 'src/app/shared/shared/shared.module';
 })
 export class MainComponent {
   private activatedRoute: ActivatedRoute = inject(ActivatedRoute);
-  private employeesService: EmployeesService = inject(EmployeesService);
+  private employees$: Signal<IEmployee[]> = toSignal(
+    this.activatedRoute.data.pipe(map((data: Data) => data['employees']))
+  );
+  private searchParam = signal<string>('');
+  private employees = computed(() => {
+    if (!this.searchParam()) return this.employees$();
 
-  private isLoadingState = signal<boolean>(false);
-  get isLoadingStateSignal() {
-    return this.isLoadingState.asReadonly();
-  }
-  private employees: Signal<IEmployee[]> = toSignal(this.activatedRoute.data.pipe(
-    map(
-      (data: Data) => data['employees'])
-  ), {
-    requireSync: true
-  })
-  get getEmployeesSignal() {
-    return this.employees;
-  }
-  private snackbar: MatSnackBar = inject(MatSnackBar);
+    return this.employees$().filter((user) =>
+      `${user.name.toLowerCase()} ${user.surname.toLowerCase()}`.includes(
+        this.searchParam().toLowerCase()
+      )
+    );
+  });
 
-  ngOnInit() {
+  get getEmployees() {
+    return this.employees();
   }
 
   onSearch(parameter: string) {
-    this.isLoadingState.set(true);
-    this.employees = toSignal(this.employeesService.findEmployees(parameter).pipe(
-      tap(
-        (res: IBackendReponse<IEmployee[]>) => {
-          res.error && this.snackbar.open(res.message, "Close", {
-            duration: 2000,
-            panelClass: ['snackbar-error']
-          });
-        }
-      ),
-      map((res) => {
-        this.isLoadingState.set(false);
-        return res.data;
-      })
-    ), {
-      requireSync: true
-    });
+    this.searchParam.set(parameter);
   }
 }

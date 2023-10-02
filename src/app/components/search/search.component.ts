@@ -21,20 +21,20 @@ interface ISearchForm {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SearchComponent {
-  searchForm!: FormGroup<ISearchForm>;
-  @Output() onSearchEmitter =
-    new EventEmitter<string>();
-  ngOnInit() {
-    this.searchForm = new FormGroup<ISearchForm>({
-      searchField: new FormControl<string>('', {
-        nonNullable: true,
-        validators: [Validators.required],
-      }),
-    });
-  }
+  searchForm: FormGroup<ISearchForm> = new FormGroup<ISearchForm>({
+    searchField: new FormControl<string>('', {
+      nonNullable: true,
+    }),
+  });
+  @Output() onSearchEmitter = new EventEmitter<string>();
+
   onSearch() {
-    const { value } =
-      this.searchForm.controls['searchField'];
+    const { value } = this.searchForm.controls['searchField'];
     value && this.onSearchEmitter.emit(value);
+  }
+  onSearchByEnter(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      this.onSearchEmitter.emit(this.searchForm.controls['searchField'].value);
+    }
   }
 }

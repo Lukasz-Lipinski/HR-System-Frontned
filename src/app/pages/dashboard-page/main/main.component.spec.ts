@@ -40,55 +40,27 @@ describe('Testing Dashboard Main Page', () => {
       ],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(
-      MainComponent
-    );
+    fixture = TestBed.createComponent(MainComponent);
     component = fixture.componentInstance;
-    component.ngOnInit();
     fixture.detectChanges();
   });
 
   describe('Class Tests', () => {
     it('Should be obtained data from activated route service', fakeAsync(() => {
-      const employees =
-        component.getEmployeesSignal();
-      expect(employees.length).toEqual(
-        mockedEmployees.length
-      );
+      const employees = component.getEmployees;
+      expect(employees.length).toEqual(mockedEmployees.length);
       expect(employees).toBeInstanceOf(Array);
 
-      for (
-        let i = 0;
-        i < employees.length;
-        i += 1
-      ) {
-        expect(employees[i].id).toEqual(
-          mockedEmployees[i].id
-        );
-        expect(employees[i].name).toEqual(
-          mockedEmployees[i].name
-        );
-        expect(employees[i].surname).toEqual(
-          mockedEmployees[i].surname
-        );
-        expect(employees[i].email).toEqual(
-          mockedEmployees[i].email
-        );
-        expect(employees[i].role).toEqual(
-          mockedEmployees[i].role
-        );
-        expect(employees[i].position).toEqual(
-          mockedEmployees[i].position
-        );
-        expect(employees[i].daysoff).toEqual(
-          mockedEmployees[i].daysoff
-        );
-        expect(employees[i].status).toEqual(
-          mockedEmployees[i].status
-        );
-        expect(employees[i].superior).toEqual(
-          mockedEmployees[i].superior
-        );
+      for (let i = 0; i < employees.length; i += 1) {
+        expect(employees[i].id).toEqual(mockedEmployees[i].id);
+        expect(employees[i].name).toEqual(mockedEmployees[i].name);
+        expect(employees[i].surname).toEqual(mockedEmployees[i].surname);
+        expect(employees[i].email).toEqual(mockedEmployees[i].email);
+        expect(employees[i].role).toEqual(mockedEmployees[i].role);
+        expect(employees[i].position).toEqual(mockedEmployees[i].position);
+        expect(employees[i].daysoff).toEqual(mockedEmployees[i].daysoff);
+        expect(employees[i].status).toEqual(mockedEmployees[i].status);
+        expect(employees[i].superior).toEqual(mockedEmployees[i].superior);
       }
     }));
   });

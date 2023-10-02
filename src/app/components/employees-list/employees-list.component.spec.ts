@@ -105,9 +105,7 @@ describe('Testing EmployeesList Component', () => {
           router,
           'navigate'
         );
-        component.editEmployee(
-          mockedEmployees[0].id
-        );
+        component.onEditEmployee(mockedEmployees[0].id);
         expect(spyOnRouter).toHaveBeenCalled();
       }
     ));

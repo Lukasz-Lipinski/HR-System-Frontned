@@ -81,7 +81,7 @@ export class EmployeesService {
       .get<IBackendReponse<IEmployee>>(url, {
         headers: {
           Authorization:
-            'Bearer' +
+            'Bearer ' +
             sessionStorage.getItem('token'),
         },
       })
@@ -120,17 +120,11 @@ export class EmployeesService {
       '/api/employee/update' +
       employeeData.id;
     return this.http
-      .put<IBackendReponse<string>>(
-        url,
-        employeeData,
-        {
-          headers: {
-            Authorization:
-              'Bearer' +
-              sessionStorage.getItem('token'),
-          },
-        }
-      )
+      .put<IBackendReponse<string>>(url, employeeData, {
+        headers: {
+          Authorization: 'Bearer ' + sessionStorage.getItem('token'),
+        },
+      })
       .pipe(
         catchError((err) => {
           return of(err);
