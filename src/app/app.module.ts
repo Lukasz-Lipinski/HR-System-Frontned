@@ -13,6 +13,7 @@ import { CreateUpdateUserPageComponent } from './pages/create-update-user-page/c
 import { environment } from './env/environment';
 import { AccountPageComponent } from './pages/account-page/account-page.component';
 import { MainComponent } from './pages/dashboard-page/main/main.component';
+import { LabelComponent } from './components/password-form/label/label.component';
 
 const pages = [
   SignInPageComponent,

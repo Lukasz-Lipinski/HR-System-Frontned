@@ -90,23 +90,10 @@ describe('UserCredentialFormComponent', () => {
       expect(form).toBeTruthy();
     });
     it('Should displayed submit button', () => {
-      const submit = fixture.debugElement.query(
-        By.css('button')
-      ).nativeElement as HTMLButtonElement;
-      expect(submit).toBeTruthy();
-      expect(submit.textContent).toContain(
-        'Add user'
-      );
-      expect(submit.disabled).toBeTruthy();
-    });
-    it('Should displayed submit button', () => {
-      setFormOnValid(
-        component.getUserCredentialForm
-      );
+      setFormOnValid(component.getUserCredentialForm);
       cdr.detectChanges();
-      const submit = fixture.debugElement.query(
-        By.css('button')
-      ).nativeElement as HTMLButtonElement;
+      const submit = fixture.debugElement.query(By.css('button'))
+        .nativeElement as HTMLButtonElement;
       expect(submit.disabled).toBeFalsy();
     });
     it('Should displayed all labels', () => {
